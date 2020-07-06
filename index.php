@@ -44,68 +44,75 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
+                <!-- Nav Item - Dashboard -->
+            <div class="scrollable-sidebar">
+                <li class="nav-item" id="home">
+                    <a class="nav-link" href="index.php">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item" id="home">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Master
-            </div>
-            <li class="nav-item" id="bahan">
-                <a class="nav-link" href="index.php?p=bahan">
-                    <i class="fas fa-fw fa-flask"></i>
-                    <span>Bahan</span>
-                </a>
-            </li>
-            <li class="nav-item" id="bom">
-                <a class="nav-link" href="index.php?p=bom">
-                    <i class="fas fa-fw fa-list-ol"></i>
-                    <span>BOM</span>
-                </a>
-            </li>
-            <div class="sidebar-heading">
-                Transaksi
-            </div>
-            <li class="nav-item" id="prod_schedule">
-                <a class="nav-link" href="index.php?p=prod_schedule">
-                    <i class="far fa-fw fa-calendar-alt"></i>
-                    <span>Production Schedule</span>
-                </a>
-            </li>
-            <li class="nav-item" id="penerimaan_bb">
-                <a class="nav-link" href="index.php?p=penerimaan_bb">
-                    <i class="fas fa-fw fa-boxes"></i>
-                    <span>Penerimaan Bahan Baku</span>
-                </a>
-            </li>
-            <li class="nav-item" id="pengeluaran_bb">
-                <a class="nav-link" href="index.php?p=pengeluaran_bb">
-                    <i class="fas fa-fw fa-box-open"></i>
-                    <span>Pengeluaran Bahan Baku</span>
-                </a>
-            </li>
-            <div class="sidebar-heading">
-                Setting
-            </div>
-            <li class="nav-item" id="user">
-                <a class="nav-link" href="index.php?p=user">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>User</span>
-                </a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Master
+                </div>
+                <li class="nav-item" id="bahan">
+                    <a class="nav-link" href="index.php?p=bahan">
+                        <i class="fas fa-fw fa-flask"></i>
+                        <span>Bahan</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="bom">
+                    <a class="nav-link" href="index.php?p=bom">
+                        <i class="fas fa-fw fa-sitemap"></i>
+                        <span>BOM</span>
+                    </a>
+                </li>
+                <div class="sidebar-heading">
+                    Transaksi
+                </div>
+                <li class="nav-item" id="prod_schedule">
+                    <a class="nav-link" href="index.php?p=prod_schedule">
+                        <i class="far fa-fw fa-calendar-alt"></i>
+                        <span>Production Schedule</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="mrp">
+                    <a class="nav-link" href="index.php?p=mrp">
+                        <i class="fas fa-fw fa-list-ul"></i>
+                        <span>MRP</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="penerimaan_bb">
+                    <a class="nav-link" href="index.php?p=penerimaan_bb">
+                        <i class="fas fa-fw fa-boxes"></i>
+                        <span>Penerimaan Bahan Baku</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="pengeluaran_bb">
+                    <a class="nav-link" href="index.php?p=pengeluaran_bb">
+                        <i class="fas fa-fw fa-box-open"></i>
+                        <span>Pengeluaran Bahan Baku</span>
+                    </a>
+                </li>
+                <div class="sidebar-heading">
+                    Setting
+                </div>
+                <li class="nav-item" id="user">
+                    <a class="nav-link" href="index.php?p=user">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>User</span>
+                    </a>
+                </li>
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center m-center">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
             </div>
         </ul>
         <!-- End of Sidebar -->
