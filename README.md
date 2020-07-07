@@ -4,9 +4,10 @@ Persediaan merupakan salah satu faktor penting dalam tumbuh kembangnya suatu per
 ## Getting Started
 Aplikasi Perencanaan Bahan Baku menggunakan Metode MRP
 
-## Progres
+## Progres Done
 - Master Bahan
 - Master BOM
 - Master User
-- Master Production Schedule?
+- Master Permintaan
+- Master Production Schedule? -> progres baru
 - Transaksi Penerimaan Bahan Baku

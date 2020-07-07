@@ -8,6 +8,7 @@ if(isset($_POST['btnSimpan'])){
 	$nama_bom = isset($_POST['nama_bom'])?$con->real_escape_string($_POST['nama_bom']):'';
 	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
 	$satuan = isset($_POST['satuan'])?$con->real_escape_string($_POST['satuan']):'';
+	$LT = isset($_POST['LT'])?$con->real_escape_string($_POST['LT']):'';
 
 	$proses = [];
 	mysqli_autocommit($con,FALSE);
@@ -30,7 +31,7 @@ if(isset($_POST['btnSimpan'])){
 
 
 
-	$sql = "INSERT INTO bom (nama_bom, satuan, jumlah) VALUES ('$nama_bom', '$satuan', $jumlah)";
+	$sql = "INSERT INTO bom (nama_bom, satuan, jumlah, LT) VALUES ('$nama_bom', '$satuan', $jumlah, $LT)";
 	if(mysqli_query($con, $sql)){
 		$id_bom = mysqli_insert_id($con);
 		foreach ($_POST['id_bahan'] as $k => $v) {

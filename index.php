@@ -71,15 +71,21 @@
                         <span>BOM</span>
                     </a>
                 </li>
-                <div class="sidebar-heading">
-                    Transaksi
-                </div>
-                <li class="nav-item" id="prod_schedule">
-                    <a class="nav-link" href="index.php?p=prod_schedule">
+                <li class="nav-item" id="permintaan">
+                    <a class="nav-link" href="index.php?p=permintaan">
+                        <i class="fas fa-fw fa-cart-arrow-down"></i>
+                        <span>Permintaan</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="mps">
+                    <a class="nav-link" href="index.php?p=mps">
                         <i class="far fa-fw fa-calendar-alt"></i>
                         <span>Production Schedule</span>
                     </a>
                 </li>
+                <div class="sidebar-heading">
+                    Transaksi
+                </div>
                 <li class="nav-item" id="mrp">
                     <a class="nav-link" href="index.php?p=mrp">
                         <i class="fas fa-fw fa-list-ul"></i>

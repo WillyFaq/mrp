@@ -1,6 +1,6 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"> <i class="fa fa-calendar-alt"></i> Production Schedule</h1>
+    <h1 class="h3 mb-0 text-gray-800"> <i class="fa fa-cart-arrow-down"></i> Permintaan</h1>
 </div>
 <?php
 	$ket = "Data";
@@ -9,10 +9,10 @@
 		$form = $ket;
 		if($ket == "ubah"){
 			$id = $_GET['id'];
-			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM mps a JOIN bom b ON a.id_bom = b.id_bom WHERE id_mps = $id ";
+			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM permintaan a JOIN bom b ON a.id_bom = b.id_bom WHERE id_permintaan = $id ";
 			$q = mysqli_query($con, $sql);
 			$row = mysqli_fetch_array($q);
-			$id_mps = $row['id_mps'];
+			$id_permintaan = $row['id_permintaan'];
 			$id_bom = $row['id_bom'];
 			$nama_bom = $row['nama_bom'];
 			$satuan = $row['satuan'];
@@ -26,12 +26,12 @@
 	<div class="col mb-4">
 		<div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary"><?= ucfirst($ket); ?> Production Schedule</h6>
+                <h6 class="m-0 font-weight-bold text-primary"><?= ucfirst($ket); ?> Permintaan</h6>
                 <?php
                 if(!isset($_GET['ket'])){
                 ?>
                 <div class="dropdown no-arrow">
-                    <a href="index.php?p=prod_schedule&ket=tambah" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><i class="fa fa-plus"></i></a>
+                    <a href="index.php?p=permintaan&ket=tambah" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><i class="fa fa-plus"></i></a>
                 </div>
             	<?php } ?>
             </div>
@@ -52,7 +52,7 @@
             		<tbody>
             		<?php
             			$i=0;
-            			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM mps a JOIN bom b ON a.id_bom = b.id_bom ORDER BY tanggal DESC";
+            			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM permintaan a JOIN bom b ON a.id_bom = b.id_bom ORDER BY tanggal DESC";
             			$q = mysqli_query($con, $sql);
             			while($row = mysqli_fetch_array($q)):
             		?>
@@ -62,8 +62,8 @@
                             <td><?= $row['jumlah']." ".$row['satuan']; ?></td>
                             <td><?= date("d-m-Y", strtotime($row['tanggal'])); ?></td>
             				<td>
-                                <a href="index.php?p=prod_schedule&ket=ubah&id=<?= $row['id_mps'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_mps'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
+                                <a href="index.php?p=permintaan&ket=ubah&id=<?= $row['id_permintaan'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
+                                <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_permintaan'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
@@ -72,8 +72,8 @@
             		</tbody>
             	</table>
             	<?php else: ?>
-            	<form method="post" action="models/p_mps.php">
-            		<input type="hidden" name="id_mps" value="<?= isset($id_mps)?$id_mps:''; ?>" >
+            	<form method="post" action="models/p_permintaan.php">
+            		<input type="hidden" name="id_permintaan" value="<?= isset($id_permintaan)?$id_permintaan:''; ?>" >
                     <div class="form-group row">
                         <label for="menu" class="col-sm-2 col-form-label">Menu</label>
                         <div class="col-sm-10">

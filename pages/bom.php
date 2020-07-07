@@ -16,6 +16,7 @@
             $nama_bom = $rw['nama_bom'];
             $jumlah = $rw['jumlah'];
             $satuan = $rw['satuan'];
+            $LT = $rw['LT'];
 		}elseif($ket == "detail"){
             $id = $_GET['id'];
             $sql = "SELECT * FROM bom WHERE id_bom = $id ";
@@ -25,6 +26,7 @@
             $nama_bom = $rw['nama_bom'];
             $jumlah = $rw['jumlah'];
             $satuan = $rw['satuan'];
+            $LT = $rw['LT'];
         }
 	}
 
@@ -52,6 +54,7 @@
             				<th>No</th>
                             <th>Nama BOM</th>
             				<th>Jumlah</th>
+                            <th>Lead Time</th>
             				<th>Bahan</th>
             				<th>Aksi</th>
             			</tr>
@@ -67,6 +70,7 @@
             				<td><?= ++$i; ?></td>
                             <td><?= $row['nama_bom']; ?></td>
                             <td><?= $row['jumlah'].' '.$row['satuan']; ?></td>
+                            <td><?= $row['LT'].' Minggu'; ?></td>
                             <td>
                                 <pre>
 <?php
@@ -100,7 +104,7 @@
                             <input type="text" class="form-control" name="nama_bom" id="nama_bom" placeholder="Nama BOM" value="<?= isset($nama_bom)?$nama_bom:''; ?>" required>
                         </div>
                     </div>
-                     <div class="form-group row">
+                    <div class="form-group row">
                         <label for="jumlah" class="col-sm-2 col-form-label">Jumlah</label>
                         <div class="col-sm-10">
                             <input type="number" min="0" step="0.1" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?= isset($jumlah)?$jumlah:''; ?>" required>
@@ -122,6 +126,17 @@
                                     }
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="LT" class="col-sm-2 col-form-label">Lead Time</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" min="0" step="1" class="form-control" name="LT" id="LT" placeholder="Lead Time" value="<?= isset($LT)?$LT:''; ?>" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Minggu</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">

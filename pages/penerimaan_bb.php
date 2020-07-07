@@ -9,7 +9,7 @@
         $form = $ket;
         if($ket == "ubah"){
             $id = $_GET['id'];
-            $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM pengadaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan WHERE a.id_pengadaan = $id";
+            $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM penerimaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan WHERE a.id_pengadaan = $id";
             $q = mysqli_query($con, $sql);
             $row = mysqli_fetch_array($q);
             $id_bahan = $row['id_bahan'];
@@ -45,7 +45,7 @@
                             <th>No</th>
                             <th>Nama Bahan</th>
                             <th>Jumlah</th>
-                            <th>Tangal Pengadaan</th>
+                            <th>Tangal Terima</th>
                             <th>Keterangan</th>
                             <th>Oleh</th>
                             <th>Aksi</th>
@@ -54,7 +54,7 @@
                     <tbody>
                     <?php
                         $i=0;
-                        $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM pengadaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan ORDER BY a.tgl_pengadaan DESC";
+                        $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM penerimaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan ORDER BY a.tgl_pengadaan DESC";
                         $q = mysqli_query($con, $sql);
                         while($row = mysqli_fetch_array($q)):
                     ?>

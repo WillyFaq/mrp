@@ -89,4 +89,26 @@
 		}
 		return $ret;
 	}
+
+	function get_bulan($bln=''){
+		$bulan = ["", 
+					"January", 
+					"Februari", 
+					"Maret",
+					"April",
+					"Mei",
+					"Juni",
+					"Juli",
+					"Agustus",
+					"September",
+					"Oktober",
+					"November",
+				];
+		unset($bulan[0]);
+		if($bln!=''){
+			return $bulan[$bln];
+		}else{
+			return $bulan;
+		}
+	}
 ?>

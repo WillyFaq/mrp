@@ -41,7 +41,7 @@
             			<tr>
             				<th>No</th>
             				<th>Nama Bahan</th>
-            				<th>Satuan</th>
+            				<th>Jumlah</th>
             				<th>Aksi</th>
             			</tr>
             		</thead>
@@ -55,7 +55,7 @@
             			<tr>
             				<td><?= ++$i; ?></td>
                             <td><?= $row['nama_bahan']; ?></td>
-                            <td><?= $row['satuan']; ?></td>
+                            <td><?= $row['jumlah'].' '.$row['satuan']; ?></td>
             				<td>
                                 <a href="index.php?p=bahan&ket=ubah&id=<?= $row['id_bahan'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
                                 <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_bahan'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
