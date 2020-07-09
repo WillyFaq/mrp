@@ -9,15 +9,18 @@
 		$form = $ket;
 		if($ket == "ubah"){
 			$id = $_GET['id'];
-			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM permintaan a JOIN bom b ON a.id_bom = b.id_bom WHERE id_permintaan = $id ";
+			$sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom WHERE id_mps = $id ";
 			$q = mysqli_query($con, $sql);
 			$row = mysqli_fetch_array($q);
-			$id_permintaan = $row['id_permintaan'];
+			$id_mps = $row['id_mps'];
 			$id_bom = $row['id_bom'];
 			$nama_bom = $row['nama_bom'];
-			$satuan = $row['satuan'];
-            $jumlah = $row['jumlah'];
-            $tanggal = $row['tanggal'];
+            $satuan = $row['satuan'];
+			$bulan = (int)date("m", strtotime($row['bulan']));
+            $M1 = $row['M1'];
+            $M2 = $row['M2'];
+            $M3 = $row['M3'];
+            $M4 = $row['M4'];
 		}
 	}
 
@@ -51,7 +54,9 @@
                         <tr>
                             <th rowspan="2">No</th>
                             <th rowspan="2">Menu</th>
+                            <th rowspan="2">Bulan</th>
                             <th colspan="4">Minggu</th>
+                            <th rowspan="2">Aksi</th>
                         </tr>
                         <tr>
                             <th>1</th>
@@ -61,10 +66,29 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <?php
+                        $i=0;
+                        $sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom ORDER BY bulan DESC";
+                        $q = mysqli_query($con, $sql);
+                        while($row = mysqli_fetch_array($q)):
+                    ?>
+                        <tr>
+                            <td><?= ++$i; ?></td>
+                            <td><?= $row['nama_bom']; ?></td>
+                            <td><?= get_bulan((int)date("m", strtotime($row['bulan']))); ?></td>
+                            <td><?= $row['M1']; ?></td>
+                            <td><?= $row['M2']; ?></td>
+                            <td><?= $row['M3']; ?></td>
+                            <td><?= $row['M4']; ?></td>
+                            <td>
+                                <a href="index.php?p=mps&ket=ubah&id=<?= $row['id_mps'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                     </tbody>
                 </table>
             <?php else: ?>
-                <form method="post" action="models/p_permintaan.php">
+                <form method="post" action="models/p_mps.php">
                     <input type="hidden" name="id_mps" value="<?= isset($id_mps)?$id_mps:''; ?>" >
                     <div class="form-group row">
                         <label for="menu" class="col-sm-2 col-form-label">Menu</label>
@@ -82,7 +106,7 @@
                                     $sat = get_bulan();
                                     foreach ($sat as $k => $v) {
                                         $sel = "";
-                                        if(isset($_GET['table']) && $_GET['table']==$k){
+                                        if(isset($bulan) && $bulan==$k){
                                             $sel = 'selected';
                                         }
                                         echo '<option value="'.$k.'" '.$sel.'>'.$v.'</option>';
@@ -91,7 +115,65 @@
                             </select>
                         </div>
                     </div>
-                    <div class="load_tbl"></div>
+                    <div class="load_tbl">
+                    <?php
+                        if(isset($M1)):
+                    ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Menu</th>
+                                <th colspan="4">Minggu</th>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><?= $row['nama_bom']; ?></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="M1" id="M1" placeholder="Jumlah" value="<?= isset($M1)?$M1:''; ?>" required >
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="st-add" ><?= $satuan; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="M2" id="M2" placeholder="Jumlah" value="<?= isset($M2)?$M2:''; ?>" required >
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="st-add" ><?= $satuan; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="M3" id="M3" placeholder="Jumlah" value="<?= isset($M3)?$M3:''; ?>" required >
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="st-add" ><?= $satuan; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="M4" id="M4" placeholder="Jumlah" value="<?= isset($M4)?$M4:''; ?>" required >
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="st-add" ><?= $satuan; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <?php endif; ?>
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-12 text-right">
                             <input type="submit" class="btn btn-primary" name="btnSimpan" value="<?= ucfirst($form); ?>">

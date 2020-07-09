@@ -16,6 +16,83 @@ if(isset($_POST['btnSimpan'])){
 		$proses = mysqli_query($con, $sql);
 	}
 
+	$tmp_data = [];
+    $sql = "SELECT 
+                a.*, 
+                b.nama_bom, 
+                b.satuan,
+                d.id_bahan,
+                d.nama_bahan,
+                c.jumlah AS 'per_parent',
+                c.level
+            FROM permintaan a 
+            JOIN bom b ON a.id_bom = b.id_bom 
+            JOIN bom_detail c ON b.id_bom = c.id_bom
+            JOIN bahan d ON c.id_bahan = d.id_bahan
+            ORDER BY tanggal DESC, d.id_bahan ASC";
+    $q = mysqli_query($con, $sql);
+    
+    while($row = mysqli_fetch_array($q)){
+        $d = [];
+        if($row['level']==1){
+            $jml = $row['jumlah'] * $row['per_parent'];
+            $d = array(
+                        'nama_bahan' => $row['nama_bahan'],
+                        'jumlah' => $row['jumlah'],
+                        'per_parent' => $row['per_parent'],
+                        'level' => $row['level'],
+                        'butuh' => $jml
+                        );
+        }else{
+            $d = array(
+                        'nama_bahan' => $row['nama_bahan'],
+                        'jumlah' => $row['jumlah'],
+                        'per_parent' => $row['per_parent'],
+                        'level' => $row['level'],
+                        'butuh' => $jml * $row['per_parent']
+                        );
+        }
+        $tmp_data[$row['id_permintaan']][$row['id_bahan']] = $d;
+    }
+    $max = [];
+    $sum = [];
+    $count = [];
+    foreach ($tmp_data as $k => $v) {
+        foreach ($v as $a => $b) {
+            if(!isset($max[$a])){
+                $max[$a] = $b['butuh'];
+            }else{
+                if($b['butuh']>$max[$a]){
+                    $max[$a] = $b['butuh'];
+                }
+            }
+            if(!isset($sum[$a])){
+                $sum[$a] = $b['butuh'];
+                $count[$a] = 1;
+            }else{
+                $sum[$a] += $b['butuh'];
+                $count[$a] += 1;
+            }
+        }
+    }
+    $avg = [];
+    foreach ($sum as $a => $b) {
+        $avg[$a] = $sum[$a] / $count[$a];
+    }
+    $data = [];
+    foreach ($sum as $k => $v) {
+        $ss = $max[$k] - $avg[$k];
+        $rop = $max[$k] - $avg[$k];
+        /*$data[$k] = array(
+                        'ss' => $ss,
+                        'rop' => $ss + $avg[$k]
+                        ); */
+        $sql = "UPDATE bahan SET ss = $ss, rop = $rop WHERE id_bahan = $k";
+		$pp = mysqli_query($con, $sql);
+    }
+
+
+
 	if($proses){
 		$_SESSION["flash"]["type"] = "success";
 		$_SESSION["flash"]["head"] = "Sukses";

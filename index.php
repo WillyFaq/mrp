@@ -105,6 +105,25 @@
                     </a>
                 </li>
                 <div class="sidebar-heading">
+                    Laporan
+                </div>
+                <li class="nav-item" id="laporan">
+                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseLaporan" aria-expanded="true" aria-controls="collapseLaporan">
+                        <i class="fas fa-fw fa-paste"></i>
+                        <span>laporan</span>
+                    </a>
+                    <div id="collapseLaporan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="index.php?p=laporan">Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan">Penerimaan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan">Pengeluaran Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan">Perencanaan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan">Pemesanan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan">Jadwal Produksi</a>
+                        </div>
+                    </div>
+                </li>
+                <div class="sidebar-heading">
                     Setting
                 </div>
                 <li class="nav-item" id="user">
@@ -135,7 +154,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                     <!-- Nav Item - Alerts -->
-                    
+                    <?php include 'pages/notification.php'; ?>
                     <div class="topbar-divider d-none d-sm-block"></div>
 
                     <!-- Nav Item - User Information -->

@@ -3,21 +3,21 @@
     <h1 class="h3 mb-0 text-gray-800"> <i class="fa fa-list-ol"></i> BOM</h1>
 </div>
 <?php
-	$ket = "Data";
-	if(isset($_GET['ket'])){
-		$ket = $_GET['ket'];
-		$form = $ket;
-		if($ket == "ubah"){
-			$id = $_GET['id'];
-			$sql = "SELECT * FROM bom WHERE id_bom = $id ";
-			$q = mysqli_query($con, $sql);
-			$rw = mysqli_fetch_array($q);
-			$id_bom = $rw['id_bom'];
+    $ket = "Data";
+    if(isset($_GET['ket'])){
+        $ket = $_GET['ket'];
+        $form = $ket;
+        if($ket == "ubah"){
+            $id = $_GET['id'];
+            $sql = "SELECT * FROM bom WHERE id_bom = $id ";
+            $q = mysqli_query($con, $sql);
+            $rw = mysqli_fetch_array($q);
+            $id_bom = $rw['id_bom'];
             $nama_bom = $rw['nama_bom'];
             $jumlah = $rw['jumlah'];
             $satuan = $rw['satuan'];
             $LT = $rw['LT'];
-		}elseif($ket == "detail"){
+        }elseif($ket == "detail"){
             $id = $_GET['id'];
             $sql = "SELECT * FROM bom WHERE id_bom = $id ";
             $q = mysqli_query($con, $sql);
@@ -28,12 +28,12 @@
             $satuan = $rw['satuan'];
             $LT = $rw['LT'];
         }
-	}
+    }
 
 ?>
 <div class="row row_angket">
-	<div class="col mb-4">
-		<div class="card shadow mb-4">
+    <div class="col mb-4">
+        <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary"><?= ucfirst($ket); ?> BOM</h6>
                 <?php
@@ -42,32 +42,32 @@
                 <div class="dropdown no-arrow">
                     <a href="index.php?p=bom&ket=tambah" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><i class="fa fa-plus"></i></a>
                 </div>
-            	<?php } ?>
+                <?php } ?>
             </div>
             <div class="card-body">
             <?php
-            	if(!isset($form)):
+                if(!isset($form)):
             ?>
-            	<table class="table dataTable">
-            		<thead>
-            			<tr>
-            				<th>No</th>
+                <table class="table dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
                             <th>Nama BOM</th>
-            				<th>Jumlah</th>
+                            <th>Jumlah</th>
                             <th>Lead Time</th>
-            				<th>Bahan</th>
-            				<th>Aksi</th>
-            			</tr>
-            		</thead>
-            		<tbody>
-            		<?php
-            			$i=0;
-            			$sql = "SELECT * FROM bom";
-            			$q = mysqli_query($con, $sql);
-            			while($row = mysqli_fetch_array($q)):
-            		?>
-            			<tr>
-            				<td><?= ++$i; ?></td>
+                            <th>Bahan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                        $i=0;
+                        $sql = "SELECT * FROM bom";
+                        $q = mysqli_query($con, $sql);
+                        while($row = mysqli_fetch_array($q)):
+                    ?>
+                        <tr>
+                            <td><?= ++$i; ?></td>
                             <td><?= $row['nama_bom']; ?></td>
                             <td><?= $row['jumlah'].' '.$row['satuan']; ?></td>
                             <td><?= $row['LT'].' Minggu'; ?></td>
@@ -82,22 +82,22 @@
 ?>
                                 </pre>
                             </td>
-            				<td>
+                            <td>
                                 <a href="index.php?p=bom&ket=detail&id=<?= $row['id_bom'] ?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-eye"></i></a>
                                 <a href="index.php?p=bom&ket=ubah&id=<?= $row['id_bom'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
                                 <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_bom'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
-            			</tr>
-            		<?php endwhile; ?>
-            		</tbody>
-            	</table>
-            	<?php elseif(isset($form) && $form=="detail"): ?>
+                        </tr>
+                    <?php endwhile; ?>
+                    </tbody>
+                </table>
+                <?php elseif(isset($form) && $form=="detail"): ?>
                 <?php include("bom_detail.php"); ?>
                 <?php else: ?>
-            	<form method="post" action="models/p_bom.php">
-            		<input type="hidden" name="id_bom" value="<?= isset($id_bom)?$id_bom:''; ?>" >
+                <form method="post" action="models/p_bom.php">
+                    <input type="hidden" name="id_bom" value="<?= isset($id_bom)?$id_bom:''; ?>" >
                     <div class="form-group row">
                         <label for="nama_bom" class="col-sm-2 col-form-label">Nama BOM</label>
                         <div class="col-sm-10">
@@ -196,8 +196,8 @@
                             <input type="submit" class="btn btn-primary" name="btnSimpan" value="<?= ucfirst($form); ?>">
                         </div>
                     </div>
-				</form>
-            	<?php endif; ?>
+                </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -13,7 +13,12 @@ if(isset($_POST['btnSimpan'])){
 	$proses = [];
 	mysqli_autocommit($con,FALSE);
 	
-	if($_POST['btnSimpan']=='Ubah'){
+	if($_POST['btnSimpan']=='Tambah'){
+		$sql = "INSERT INTO bom (nama_bom, satuan, jumlah, LT) VALUES ('$nama_bom', '$satuan', $jumlah, $LT)";
+		
+	}else if($_POST['btnSimpan']=='Ubah'){
+		$sql = "UPDATE bom SET nama_bom = '$nama_bom', satuan = '$satuan', jumlah = $jumlah, LT = $LT WHERE id_bom=$id_bom";
+		/*
 		$sql = "DELETE FROM bom WHERE id_bom = $id_bom";
 		if(mysqli_query($con, $sql)){
 			mysqli_commit($con);
@@ -26,14 +31,13 @@ if(isset($_POST['btnSimpan'])){
 			$_SESSION["flash"]["msg"] = "Data gagal disimpan!";
 			header("location:../index.php?p=bom");
 			exit();
-		}
+		}*/
 	}
 
-
-
-	$sql = "INSERT INTO bom (nama_bom, satuan, jumlah, LT) VALUES ('$nama_bom', '$satuan', $jumlah, $LT)";
 	if(mysqli_query($con, $sql)){
-		$id_bom = mysqli_insert_id($con);
+		if($_POST['btnSimpan']=='Tambah'){
+			$id_bom = mysqli_insert_id($con);
+		}
 		foreach ($_POST['id_bahan'] as $k => $v) {
 			$id_bahan = $v;
 			$jml_bahan = $_POST['jumlah_bahan'][$k];
