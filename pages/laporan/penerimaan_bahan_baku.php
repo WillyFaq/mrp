@@ -65,6 +65,7 @@
 
             if(tgl1=='' || tgl2==''){
                 return true;
+                
             }
 
             return false;
