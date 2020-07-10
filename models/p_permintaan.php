@@ -82,7 +82,7 @@ if(isset($_POST['btnSimpan'])){
     $data = [];
     foreach ($sum as $k => $v) {
         $ss = $max[$k] - $avg[$k];
-        $rop = $max[$k] - $avg[$k];
+        $rop = $ss + $avg[$k];
         /*$data[$k] = array(
                         'ss' => $ss,
                         'rop' => $ss + $avg[$k]

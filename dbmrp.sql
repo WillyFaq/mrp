@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS `bahan` (
 -- Dumping data for table dbmrp.bahan: ~7 rows (approximately)
 /*!40000 ALTER TABLE `bahan` DISABLE KEYS */;
 INSERT INTO `bahan` (`id_bahan`, `nama_bahan`, `satuan`, `jumlah`, `ss`, `rop`) VALUES
-	(1, 'Frit Mentah tipe A Q1', 'Kg', 1515, NULL, NULL),
-	(3, 'Frit Mentah tipe B Q2', 'Kg', 1515, NULL, NULL),
-	(4, 'Kaolin Q3', 'Kg', 1515, NULL, NULL),
-	(5, 'Larutan Pencampur Q4', 'Liter', 1414, NULL, NULL),
-	(6, 'Air Q5', 'Liter', 0, NULL, NULL),
-	(7, 'CMC Q6', 'Kg', 0, NULL, NULL),
-	(8, 'STPP Q7', 'Kg', 0, NULL, NULL);
+	(1, 'Frit Mentah tipe A Q1', 'Kg', 51515, 23987, 50500),
+	(3, 'Frit Mentah tipe B Q2', 'Kg', 31515, 14392, 30300),
+	(4, 'Kaolin Q3', 'Kg', 11515, 4797, 10100),
+	(5, 'Larutan Pencampur Q4', 'Liter', 101414, 4797, 10100),
+	(6, 'Air Q5', 'Liter', 4400000, 392435, 826180),
+	(7, 'CMC Q6', 'Kg', 100000, 48455, 102010),
+	(8, 'STPP Q7', 'Kg', 100000, 48455, 102010);
 /*!40000 ALTER TABLE `bahan` ENABLE KEYS */;
 
 -- Dumping structure for table dbmrp.bom
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `bom` (
   `jumlah` double DEFAULT NULL,
   `LT` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_bom`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table dbmrp.bom: ~1 rows (approximately)
 /*!40000 ALTER TABLE `bom` DISABLE KEYS */;
@@ -62,23 +62,24 @@ CREATE TABLE IF NOT EXISTS `bom_detail` (
   `id_bahan` int(11) DEFAULT NULL,
   `jumlah` double DEFAULT NULL,
   `level` int(11) DEFAULT NULL,
+  `parent` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_bom_detail`) USING BTREE,
   KEY `id_bahan` (`id_bahan`),
   KEY `id_menu` (`id_bom`) USING BTREE,
   CONSTRAINT `FK_bom_detail_bom` FOREIGN KEY (`id_bom`) REFERENCES `bom` (`id_bom`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_menu_detail_bahan` FOREIGN KEY (`id_bahan`) REFERENCES `bahan` (`id_bahan`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table dbmrp.bom_detail: ~7 rows (approximately)
 /*!40000 ALTER TABLE `bom_detail` DISABLE KEYS */;
-INSERT INTO `bom_detail` (`id_bom_detail`, `id_bom`, `id_bahan`, `jumlah`, `level`) VALUES
-	(34, 8, 1, 505, 1),
-	(35, 8, 3, 303, 1),
-	(36, 8, 4, 101, 1),
-	(37, 8, 5, 101, 1),
-	(38, 8, 6, 81.8, 2),
-	(39, 8, 7, 10.1, 2),
-	(40, 8, 8, 10.1, 2);
+INSERT INTO `bom_detail` (`id_bom_detail`, `id_bom`, `id_bahan`, `jumlah`, `level`, `parent`) VALUES
+	(34, 8, 1, 505, 1, NULL),
+	(35, 8, 3, 303, 1, NULL),
+	(36, 8, 4, 101, 1, NULL),
+	(37, 8, 5, 101, 1, NULL),
+	(38, 8, 6, 81.8, 2, NULL),
+	(39, 8, 7, 10.1, 2, NULL),
+	(40, 8, 8, 10.1, 2, NULL);
 /*!40000 ALTER TABLE `bom_detail` ENABLE KEYS */;
 
 -- Dumping structure for table dbmrp.mps
@@ -93,10 +94,12 @@ CREATE TABLE IF NOT EXISTS `mps` (
   PRIMARY KEY (`id_mps`),
   KEY `id_bom` (`id_bom`),
   CONSTRAINT `FK_mps_bom` FOREIGN KEY (`id_bom`) REFERENCES `bom` (`id_bom`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table dbmrp.mps: ~0 rows (approximately)
+-- Dumping data for table dbmrp.mps: ~1 rows (approximately)
 /*!40000 ALTER TABLE `mps` DISABLE KEYS */;
+INSERT INTO `mps` (`id_mps`, `id_bom`, `bulan`, `M1`, `M2`, `M3`, `M4`) VALUES
+	(1, 8, '2020-07-01', 12, 57, 90, 68);
 /*!40000 ALTER TABLE `mps` ENABLE KEYS */;
 
 -- Dumping structure for table dbmrp.penerimaan
@@ -112,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `penerimaan` (
   KEY `id_bahan` (`id_bahan`),
   CONSTRAINT `FK_penerimaan_bahan` FOREIGN KEY (`id_bahan`) REFERENCES `bahan` (`id_bahan`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_penerimaan_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table dbmrp.penerimaan: ~4 rows (approximately)
 /*!40000 ALTER TABLE `penerimaan` DISABLE KEYS */;
@@ -120,7 +123,17 @@ INSERT INTO `penerimaan` (`id_pengadaan`, `id_user`, `id_bahan`, `tgl_pengadaan`
 	(2, 3, 1, '2020-06-21', 1515, 'Masuk'),
 	(3, 3, 3, '2020-06-21', 1515, 'Masuk'),
 	(4, 3, 4, '2020-06-21', 1515, 'Masuk'),
-	(6, 3, 5, '2020-06-21', 1414, '');
+	(6, 3, 5, '2020-06-21', 1414, ''),
+	(7, 3, 6, '2020-06-21', 400000, NULL),
+	(8, 3, 7, '2020-06-21', 50000, NULL),
+	(9, 3, 8, '2020-06-21', 50000, NULL),
+	(18, 3, 1, '2020-07-01', 50000, NULL),
+	(19, 3, 3, '2020-07-01', 30000, NULL),
+	(20, 3, 4, '2020-07-01', 10000, NULL),
+	(21, 3, 5, '2020-07-01', 100000, NULL),
+	(22, 3, 6, '2020-07-01', 4000000, NULL),
+	(23, 3, 7, '2020-07-01', 50000, NULL),
+	(24, 3, 8, '2020-07-01', 50000, NULL);
 /*!40000 ALTER TABLE `penerimaan` ENABLE KEYS */;
 
 -- Dumping structure for table dbmrp.permintaan
@@ -132,15 +145,17 @@ CREATE TABLE IF NOT EXISTS `permintaan` (
   PRIMARY KEY (`id_permintaan`) USING BTREE,
   KEY `id_bom` (`id_bom`),
   CONSTRAINT `FK_permintaan_bom` FOREIGN KEY (`id_bom`) REFERENCES `bom` (`id_bom`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table dbmrp.permintaan: ~4 rows (approximately)
+-- Dumping data for table dbmrp.permintaan: ~5 rows (approximately)
 /*!40000 ALTER TABLE `permintaan` DISABLE KEYS */;
 INSERT INTO `permintaan` (`id_permintaan`, `id_bom`, `jumlah`, `tanggal`) VALUES
 	(9, 8, 23, '2020-07-12'),
 	(10, 8, 34, '2020-07-15'),
 	(11, 8, 90, '2020-07-21'),
-	(12, 8, 23, '2020-07-27');
+	(12, 8, 23, '2020-07-27'),
+	(13, 8, 45, '2020-07-30'),
+	(14, 8, 100, '2020-08-02');
 /*!40000 ALTER TABLE `permintaan` ENABLE KEYS */;
 
 -- Dumping structure for table dbmrp.user

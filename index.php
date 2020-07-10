@@ -26,6 +26,8 @@
     <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <script src="assets/vendor/jquery/jquery.min.js"></script>
+    
+    <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -114,12 +116,12 @@
                     </a>
                     <div id="collapseLaporan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="index.php?p=laporan">Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan">Penerimaan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan">Pengeluaran Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan">Perencanaan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan">Pemesanan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan">Jadwal Produksi</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=bahan_baku">Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=penerimaan_bahan_baku">Penerimaan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=pengeluaran_bahan_baku">Pengeluaran Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=perencanaan_bahan_baku">Perencanaan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=pemesanan_bahan_baku">Pemesanan Bahan Baku</a>
+                            <a class="collapse-item" href="index.php?p=laporan&ket=jadwal_produksi">Jadwal Produksi</a>
                         </div>
                     </div>
                 </li>
@@ -273,7 +275,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="assets/js/sb-admin-2.js"></script>
-    <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="assets/vendor/datatables/dataTables.bootstrap4.min.js"></script> 
 
     <script type="text/javascript">
