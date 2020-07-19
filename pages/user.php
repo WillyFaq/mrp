@@ -62,9 +62,11 @@
                             <td><?= get_jabatan($row['jabatan']); ?></td>
             				<td>
                                 <a href="index.php?p=user&ket=ubah&id=<?= $row['id_user'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
+                                <?php if($row['jabatan'] != 5): ?>
                                 <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_user'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
                                     <i class="fa fa-trash"></i>
                                 </button>
+                                <?php endif; ?>
                             </td>
             			</tr>
             		<?php endwhile; ?>

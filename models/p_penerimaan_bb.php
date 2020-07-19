@@ -7,7 +7,7 @@ if(isset($_POST['btnSimpan'])){
 	$tgl_penerimaan = isset($_POST['tgl_penerimaan'])?$con->real_escape_string($_POST['tgl_penerimaan']):'';
 	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
 	
-	$id_user = 3;
+	$id_user = $_SESSION['user'];
 
 	$proses = 0;
 	if($_POST['btnSimpan']=="Simpan"){

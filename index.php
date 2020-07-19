@@ -1,8 +1,8 @@
 <?php
     require_once("config/koneksi.php");
-    /*if(!isset($_SESSION['user']) && $_SESSION['user']==""){
+    if(!isset($_SESSION['user']) && $_SESSION['user']==""){
         header("location:login.php");
-    }*/
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,98 +48,7 @@
             <hr class="sidebar-divider my-0">
                 <!-- Nav Item - Dashboard -->
             <div class="scrollable-sidebar">
-                <li class="nav-item" id="home">
-                    <a class="nav-link" href="index.php">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Master
-                </div>
-                <li class="nav-item" id="bahan">
-                    <a class="nav-link" href="index.php?p=bahan">
-                        <i class="fas fa-fw fa-flask"></i>
-                        <span>Bahan</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="bom">
-                    <a class="nav-link" href="index.php?p=bom">
-                        <i class="fas fa-fw fa-sitemap"></i>
-                        <span>BOM</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="permintaan">
-                    <a class="nav-link" href="index.php?p=permintaan">
-                        <i class="fas fa-fw fa-cart-arrow-down"></i>
-                        <span>Permintaan</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="mps">
-                    <a class="nav-link" href="index.php?p=mps">
-                        <i class="far fa-fw fa-calendar-alt"></i>
-                        <span>Production Schedule</span>
-                    </a>
-                </li>
-                <div class="sidebar-heading">
-                    Transaksi
-                </div>
-                <li class="nav-item" id="mrp">
-                    <a class="nav-link" href="index.php?p=mrp">
-                        <i class="fas fa-fw fa-list-ul"></i>
-                        <span>MRP</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="pengadaan_bb">
-                    <a class="nav-link" href="index.php?p=pengadaan_bb">
-                        <i class="fas fa-fw fa-boxes"></i>
-                        <span>Pengadaan Bahan Baku</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="penerimaan_bb">
-                    <a class="nav-link" href="index.php?p=penerimaan_bb">
-                        <i class="fas fa-fw fa-boxes"></i>
-                        <span>Penerimaan Bahan Baku</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="pengeluaran_bb">
-                    <a class="nav-link" href="index.php?p=pengeluaran_bb">
-                        <i class="fas fa-fw fa-box-open"></i>
-                        <span>Pengeluaran Bahan Baku</span>
-                    </a>
-                </li>
-                <div class="sidebar-heading">
-                    Laporan
-                </div>
-                <li class="nav-item" id="laporan">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseLaporan" aria-expanded="true" aria-controls="collapseLaporan">
-                        <i class="fas fa-fw fa-paste"></i>
-                        <span>laporan</span>
-                    </a>
-                    <div id="collapseLaporan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="index.php?p=laporan&ket=bahan_baku">Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan&ket=penerimaan_bahan_baku">Penerimaan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan&ket=pengeluaran_bahan_baku">Pengeluaran Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan&ket=perencanaan_bahan_baku">Perencanaan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan&ket=pemesanan_bahan_baku">Pemesanan Bahan Baku</a>
-                            <a class="collapse-item" href="index.php?p=laporan&ket=jadwal_produksi">Jadwal Produksi</a>
-                        </div>
-                    </div>
-                </li>
-                <div class="sidebar-heading">
-                    Setting
-                </div>
-                <li class="nav-item" id="user">
-                    <a class="nav-link" href="index.php?p=user">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>User</span>
-                    </a>
-                </li>
+                <?php include 'templates/sidebar.php'; ?>
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
                 <!-- Sidebar Toggler (Sidebar) -->
@@ -168,12 +77,12 @@
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['name']; ?></span>
                             <img class="img-profile rounded-circle" src="assets/img/user.png">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="index.php?p=user&ket=ubah&id=1">
+                            <a class="dropdown-item" href="index.php?p=user&ket=ubah&id=<?= $_SESSION['user']; ?>">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>

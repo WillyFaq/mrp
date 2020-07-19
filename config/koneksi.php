@@ -18,7 +18,7 @@
 	}
 
 	function get_jabatan($id = null){
-		$jab = ["Atasan", "PPIC", "Gudang", "Pengadaan", "Produksi"];
+		$jab = ["Atasan", "PPIC", "Gudang", "Pengadaan", "Produksi", "Admin Web"];
 		if(is_null($id)){
 			return $jab;
 		}else{

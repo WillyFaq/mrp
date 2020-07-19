@@ -84,7 +84,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".load_mrp").load("pages/ajax_mrp.php?table=8&id_bom=8");
+		//$(".load_mrp").load("pages/ajax_mrp.php?table=8&id_bom=8");
 		$("#cb_bulan").change(function(){
 			var id_bom = $("#id_bom").val();
             if(id_bom!=''){

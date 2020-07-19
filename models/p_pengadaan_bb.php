@@ -8,7 +8,7 @@ if(isset($_POST['btnSimpan'])){
 	$tgl_pengadaan = isset($_POST['tgl_pengadaan'])?$con->real_escape_string($_POST['tgl_pengadaan']):'';
 	$keterangan = isset($_POST['keterangan'])?$con->real_escape_string($_POST['keterangan']):'';
 
-	$id_user = 4;
+	$id_user = $_SESSION['user'];
 
 	if($_POST['btnSimpan']=="Tambah"){
 		$sql = "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan)  VALUES ($id_user, $id_bahan, '$tgl_pengadaan', $jumlah, '$keterangan')";

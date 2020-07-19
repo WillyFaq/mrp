@@ -28,10 +28,50 @@
     <script src="assets/vendor/jquery/jquery.min.js"></script>
 </head>
 <body class="bg-gradient-primary">
+    <?php
+        if(isset($_GET['logout'])){
+            $_SESSION['user'] = '';
+            $_SESSION['type'] = '';
+            $_SESSION['name'] = '';
+            unset($_SESSION['user']);
+            unset($_SESSION['type']);
+            unset($_SESSION['name']);
+        }
+        if(isset($_POST['btnlogin'])){
+            //print_r($_POST);
+            $username = isset($_POST['username'])?$con->real_escape_string($_POST['username']):'';
+            $password = isset($_POST['password'])?$con->real_escape_string($_POST['password']):'';
+            
+            $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password';";
+            $q = mysqli_query($con, $sql);
+            $nr = mysqli_num_rows($q);
+            if($nr>0){
+                $row = mysqli_fetch_array($q);
+                $_SESSION['user'] = $row['id_user'];
+                $_SESSION['type'] = $row['jabatan'];
+                $_SESSION['name'] = $row['nama_user'];
+
+                $_SESSION["flash"]["type"] = "success";
+                $_SESSION["flash"]["head"] = "Login Sukses";
+                $_SESSION["flash"]["msg"] = "Selamat datang <br><strong>$_SESSION[name]</strong>!";
+                header("location:index.php");
+                exit();
+            }else{
+                $_SESSION["flash"]["type"] = "danger";
+                $_SESSION["flash"]["head"] = "Login Gagal";
+                $_SESSION["flash"]["msg"] = "<br>Username/password Salah!";
+                header("location:login.php");
+                exit();
+            }
+        }
+    ?>
     <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+            </div>
             <div class="col-xl-10 col-lg-12 col-md-9">
+                <h1> <br></h1>
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
@@ -42,14 +82,14 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="post">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Username">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
                                         </div>
-                                        <button type="submit" class="btn btn btn-primary btn-user btn-block">Login</button>
+                                        <input type="submit" name="btnlogin" value="Login" class="btn btn btn-primary btn-user btn-block">
                                     </form>
                                     <hr>
                                 </div>
@@ -60,6 +100,16 @@
             </div>
         </div>
     </div>
+    
+    <?php if(isset($_SESSION["flash"])){ ?>
+
+    <div class="alert alert-<?= $_SESSION["flash"]["type"]; ?> alert-dismissible fade show" role="alert">
+        <strong><?= $_SESSION["flash"]["head"]; ?></strong> <?= $_SESSION["flash"]["msg"]; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <?php unset($_SESSION['flash']); } ?>
 
     <!-- Bootstrap core JavaScript-->
     <script src="assets/vendor/jquery/jquery.min.js"></script>
@@ -70,7 +120,16 @@
 
     <!-- Custom scripts for all pages-->
     <script src="assets/js/sb-admin-2.min.js"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setTimeout(function(){
+                $(".alert").hide(500);
+                <?php
+                    //unset($_SESSION['flash']);
+                ?>
+            }, 3000);
+        });
+    </script>
 </body>
 
 </html>

@@ -2,6 +2,12 @@
     require_once("../config/koneksi.php");
 	if(isset($_GET['table'])):
         $id_bom = $_GET['id_bom'];
+
+        $b = $_GET['table'];
+        $thn = date("Y");
+        $sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom WHERE MONTH(a.bulan) = $b AND YEAR(a.bulan) = $thn AND a.id_bom = $id_bom ORDER BY bulan DESC";
+        $q = mysqli_query($con, $sql);
+        if(mysqli_num_rows($q)>0):
 ?>
 	<table class="table table-bordered tbl_mrp">
 		<thead class="thead-dark">
@@ -20,10 +26,6 @@
         <?php
             $mps = [];
             $i=0;
-            $b = $_GET['table'];
-            $thn = date("Y");
-            $sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom WHERE MONTH(a.bulan) = $b AND YEAR(a.bulan) = $thn AND a.id_bom = $id_bom ORDER BY bulan DESC";
-            $q = mysqli_query($con, $sql);
             while($row = mysqli_fetch_array($q)):
                 $mps[] = $row["M1"];
                 $mps[] = $row["M2"];
@@ -64,6 +66,58 @@ $sql = "SELECT * FROM mrp WHERE id_bahan IN (".join($id_bahan, ",").") AND MONTH
 $q = mysqli_query($con, $sql);
 
 if(mysqli_num_rows($q)>0){
+    $sql = "SELECT
+                a.id_mrp,
+                a.id_bahan,
+                c.nama_bahan,
+                c.satuan,
+                c.LT,
+                b.level,
+                c.rop,
+                a.bulan,
+                a.minggu,
+                a.GR,
+                a.SR,
+                a.OHI,
+                a.NR,
+                a.POR,
+                a.POREL
+            FROM mrp a
+            JOIN bom_detail b ON a.id_bahan = b.id_bahan
+            JOIN bahan c ON b.id_bahan = c.id_bahan";
+    $q = mysqli_query($con, $sql);
+    $tmp_data = [];
+    while($row = mysqli_fetch_array($q)){
+        $tmp_data[$row['id_mrp']] = $row;
+    }   
+    foreach ($tmp_data as $key => $row) {
+        $data[$row['id_bahan']] = array(
+                                        'id_bahan' => $row['id_bahan'], 
+                                        'nama_bahan' => $row['nama_bahan'], 
+                                        'satuan' => $row['satuan'], 
+                                        'LT' => $row['LT'], 
+                                        'level' => $row['level'], 
+                                        'rop' => $row['rop'], 
+                                        'mrp' => array(
+                                                        'GR' => [],
+                                                        'SR' => [],
+                                                        'OHI' => [],
+                                                        'NR' => [],
+                                                        'POR' => [],
+                                                        'PORel' => []
+                                                        )
+                                        );
+    }
+    foreach ($tmp_data as $key => $row) {
+        $data[$row['id_bahan']]['mrp']['GR'][$row['minggu']] = $row['GR'];
+        $data[$row['id_bahan']]['mrp']['SR'][$row['minggu']] = $row['SR'];
+        $data[$row['id_bahan']]['mrp']['OHI'][$row['minggu']] = $row['OHI'];
+        $data[$row['id_bahan']]['mrp']['NR'][$row['minggu']] = $row['NR'];
+        $data[$row['id_bahan']]['mrp']['POR'][$row['minggu']] = $row['POR'];
+        $data[$row['id_bahan']]['mrp']['PORel'][$row['minggu']] = $row['POREL'];
+    }
+
+    
 
 }else{
     $data = $mrp->get_mrp($con, $id_bom, $mps, $b, $thn);
@@ -83,6 +137,8 @@ if(mysqli_num_rows($q)>0){
         }
     }
 
+    mysqli_autocommit($con,FALSE);
+    $process = [];
     // insert mrp
     foreach ($data as $key => $value) {
         $weeks = get_week($b, $thn);
@@ -94,19 +150,30 @@ if(mysqli_num_rows($q)>0){
             $n = $value['mrp']['NR'][$i];
             $p = $value['mrp']['POR'][$i];
             $pr = $value['mrp']['PORel'][$i];
+            $week = date("Y-m-d", strtotime($weeks[$i]));
             $sql = "INSERT INTO mrp (id_bahan, bulan, minggu, GR, SR, OHI, NR, POR, POREL) VALUES ";
-            $sql .= "($value[id_bahan], $weeks[$i], $i, $g, $s, $o, $n, $p, $pr)";
-            echo "$sql<br>";
+            $sql .= "($value[id_bahan], '$week', $i, $g, $s, $o, $n, $p, $pr)";
+            //echo "$sql<br>";
+            if(mysqli_query($con, $sql)){
+                $process[] = 1; 
+            }else{
+                $process[] = 0; 
+            }
         }
-        echo "<hr>";
     }
 
     // perencanaan bahan baku
     foreach ($data_porel as $k => $row){
         foreach ($row as $c => $d){
-            $sql =  "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan) VALUES ";
-            $sql .= "(4, $k, '$d[tgl]', $d[val], 'MRP')";
-            //echo "$sql<br>";  
+            $week = date("Y-m-d", strtotime($d['tgl']));
+            $sql =  "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan, sts) VALUES ";
+            $sql .= "(4, $k, '$week', $d[val], 'MRP', 0)";
+            //echo "$sql<br>"; 
+            if(mysqli_query($con, $sql)){
+                $process[] = 1; 
+            }else{
+                $process[] = 0; 
+            } 
         }
     }
 
@@ -114,14 +181,24 @@ if(mysqli_num_rows($q)>0){
     foreach ($data as $key => $value) {
         foreach ($value['mrp']["GR"] as $k => $v) {
             if($k>0){
-                //$cb = 5 + $k;
                 $weeks = get_week($b, $thn);
-                //print_r($weeks);
-                //echo "$v - ".$weeks[$k]."<br>";
+                $week = date("Y-m-d", strtotime($weeks[$k]));
+                $sql = "INSERT INTO pengeluaran (id_bahan, tgl_pengeluaran, jumlah, keterangan, sts) VALUES ";
+                $sql .= "($key, '$week', $v, 'Produksi', 0)";
+                if(mysqli_query($con, $sql)){
+                    $process[] = 1; 
+                }else{
+                    $process[] = 0; 
+                }
             }
         }
-        //echo "<hr>";
-    }   
+    } 
+
+    if(!in_array(0, $process)){
+        mysqli_commit($con);
+    }else{
+        mysqli_rollback($con);
+    }
 
 }
 
@@ -165,4 +242,5 @@ if(mysqli_num_rows($q)>0){
         </tbody>
     </table>
     <?php endforeach; ?>
+<?php endif; ?>
 <?php endif; ?>

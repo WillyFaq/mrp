@@ -1,7 +1,5 @@
 <style>
-.error{
-    width: 14.5rem;
-}
+.error{width: 12.6rem;}
 </style>
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
