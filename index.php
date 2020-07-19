@@ -26,7 +26,7 @@
     <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <script src="assets/vendor/jquery/jquery.min.js"></script>
-    
+
     <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
 </head>
 <body id="page-top">
@@ -92,6 +92,12 @@
                     <a class="nav-link" href="index.php?p=mrp">
                         <i class="fas fa-fw fa-list-ul"></i>
                         <span>MRP</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="pengadaan_bb">
+                    <a class="nav-link" href="index.php?p=pengadaan_bb">
+                        <i class="fas fa-fw fa-boxes"></i>
+                        <span>Pengadaan Bahan Baku</span>
                     </a>
                 </li>
                 <li class="nav-item" id="penerimaan_bb">
@@ -206,7 +212,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; MRP CV. Sainty Teknologi 2020</span>
                     </div>
                 </div>
             </footer>

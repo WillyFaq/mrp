@@ -55,12 +55,14 @@
             			$sql = "SELECT a.*, b.nama_bom, b.satuan FROM permintaan a JOIN bom b ON a.id_bom = b.id_bom ORDER BY tanggal DESC";
             			$q = mysqli_query($con, $sql);
             			while($row = mysqli_fetch_array($q)):
+                            $date = explode("-",$row['tanggal']);
+                            $date = $date[2].' '.get_bulan((int)$date[1]).' '.$date[0];
             		?>
             			<tr>
             				<td><?= ++$i; ?></td>
                             <td><?= $row['nama_bom']; ?></td>
                             <td><?= $row['jumlah']." ".$row['satuan']; ?></td>
-                            <td><?= date("d-m-Y", strtotime($row['tanggal'])); ?></td>
+                            <td><?= $date; ?></td>
             				<td>
                                 <a href="index.php?p=permintaan&ket=ubah&id=<?= $row['id_permintaan'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
                                 <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_permintaan'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">

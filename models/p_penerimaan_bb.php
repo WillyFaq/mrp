@@ -4,20 +4,28 @@ require_once("../config/koneksi.php");
 if(isset($_POST['btnSimpan'])){
 	$id_pengadaan = isset($_POST['id_pengadaan'])?$con->real_escape_string($_POST['id_pengadaan']):'';
 	$id_bahan = isset($_POST['id_bahan'])?$con->real_escape_string($_POST['id_bahan']):'';
+	$tgl_penerimaan = isset($_POST['tgl_penerimaan'])?$con->real_escape_string($_POST['tgl_penerimaan']):'';
 	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
-	$tgl_pengadaan = isset($_POST['tgl_pengadaan'])?$con->real_escape_string($_POST['tgl_pengadaan']):'';
-	$keterangan = isset($_POST['keterangan'])?$con->real_escape_string($_POST['keterangan']):'';
-
+	
 	$id_user = 3;
 
-	if($_POST['btnSimpan']=="Tambah"){
-		$sql = "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan)  VALUES ($id_user, $id_bahan, '$tgl_pengadaan', $jumlah, '$keterangan')";
-		$proses = mysqli_query($con, $sql);
-	}else if($_POST['btnSimpan']=="Ubah"){
-		$sql = "UPDATE pengadaan SET id_user = $id_user, id_bahan = '$id_bahan', tgl_pengadaan = '$tgl_pengadaan', jumlah = '$jumlah', keterangan = '$keterangan' WHERE id_pengadaan = '$id_pengadaan'";
-		$proses = mysqli_query($con, $sql);
+	$proses = 0;
+	if($_POST['btnSimpan']=="Simpan"){
+		$sql = "UPDATE pengadaan SET tgl_penerimaan = '$tgl_penerimaan', sts = $id_user WHERE id_pengadaan = '$id_pengadaan'";
+		if(mysqli_query($con, $sql)){
+			$sql = "SELECT jumlah FROM bahan WHERE id_bahan = $id_bahan";
+			$q = mysqli_query($con, $sql);
+			while($row = mysqli_fetch_array($q)){
+				$jumlah += $row['jumlah'];
+			}
+			$sql = "UPDATE bahan SET jumlah = $jumlah WHERE id_bahan = $id_bahan";
+			$q = mysqli_query($con, $sql);
+			if(mysqli_query($con, $sql)){
+				$proses = 1;
+			}
+		}
 	}
-	if($proses){
+	if($proses==1){
 		$_SESSION["flash"]["type"] = "success";
 		$_SESSION["flash"]["head"] = "Sukses";
 		$_SESSION["flash"]["msg"] = "Data berhasil disimpan!";

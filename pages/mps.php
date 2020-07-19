@@ -21,6 +21,35 @@
             $M2 = $row['M2'];
             $M3 = $row['M3'];
             $M4 = $row['M4'];
+
+            $bln = date("m", strtotime($row['bulan']));
+            $thn = date("Y");
+            $sql2 = "SELECT 
+                        b.nama_bom, 
+                        b.satuan,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 1, a.jumlah, 0) ) AS M1,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 2, a.jumlah, 0) ) AS M2,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 3, a.jumlah, 0) ) AS M3,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 4, a.jumlah, 0) ) AS M4
+                    FROM permintaan a 
+                    JOIN bom b ON a.id_bom = b.id_bom 
+                    WHERE a.id_bom = $id_bom
+                    ORDER BY tanggal ASC";
+            $q2 = mysqli_query($con, $sql2);
+            while($row2 = mysqli_fetch_array($q2)){
+                if($M1<$row2["M1"]){
+                    $M1=$row2["M1"];
+                }
+                if($M2<$row2["M2"]){
+                    $M2=$row2["M2"];
+                }
+                if($M3<$row2["M3"]){
+                    $M3=$row2["M3"];
+                }
+                if($M4<$row2["M4"]){
+                    $M4=$row2["M4"];
+                }
+            }
 		}
 	}
 

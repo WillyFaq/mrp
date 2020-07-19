@@ -1,3 +1,8 @@
+<style>
+    .dataTables_filter{
+        display: none;
+    }
+</style>
 <form action="" class="mb-4">
     <div class="row">
         <div class="col">
@@ -18,16 +23,18 @@
         <tr>
             <th>No</th>
             <th>Nama Bahan</th>
-            <th>Tangal Terima</th>
+            <th>Tangal Pengadaan</th>
             <th>Jumlah</th>
             <th>Oleh</th>
             <th>Keterangan</th>
+            <th>Tangal Terima</th>
+            <th>Penerima</th>
         </tr>
     </thead>
     <tbody>
     <?php
         $i=0;
-        $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM penerimaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan ORDER BY a.tgl_pengadaan DESC";
+        $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan, d.nama_user AS 'penerima' FROM pengadaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan JOIN user d ON a.sts = d.id_user   WHERE sts <> 0 ORDER BY a.tgl_pengadaan DESC";
         $q = mysqli_query($con, $sql);
         while($row = mysqli_fetch_array($q)):
     ?>
@@ -38,6 +45,8 @@
             <td><?= $row['jumlah']." ".$row['satuan']; ?></td>
             <td><?= $row['nama_user']; ?></td>
             <td><?= $row['keterangan']; ?></td>
+            <td><?= date("d-m-Y", strtotime($row['tgl_penerimaan'])); ?></td>
+            <td><?= $row['penerima']; ?></td>
         </tr>
     <?php endwhile; ?>
     </tbody>
@@ -60,12 +69,31 @@
         function( settings, data, dataIndex ) {
             var tgl1 = $('#tgl1').val();
             var tgl2 = $('#tgl2').val();
-
-            var t_tgl = data[2];
-
-            if(tgl1=='' || tgl2==''){
+            tgl1 = tgl1!=''?Date.parse(tgl1):'';
+            tgl2 = tgl2!=''?Date.parse(tgl2):'';
+            //console.log(tgl1);
+            //var t_tgl = Date.parse(data[2]);
+            var t = data[2].split("-");
+            var t_tgl = t[2]+"-"+t[1]+"-"+t[0];
+            t_tgl = Date.parse(t_tgl);
+            if(tgl1=='' && tgl2==''){
                 return true;
-                
+            }else{
+                if(tgl1!='' && tgl2==''){
+                    if(t_tgl>=tgl1){
+                        return true;
+                    }
+                }else if(tgl1=='' && tgl2!=''){
+                    if(t_tgl<=tgl2){
+                        return true;
+                    }
+                }else{
+                    if(tgl1<tgl2){
+                        if(t_tgl>=tgl1 && t_tgl<=tgl2){
+                            return true;
+                        }
+                    }
+                }
             }
 
             return false;

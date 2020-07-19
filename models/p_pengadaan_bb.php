@@ -1,21 +1,22 @@
 <?php
 
 require_once("../config/koneksi.php");
-
 if(isset($_POST['btnSimpan'])){
+	$id_pengadaan = isset($_POST['id_pengadaan'])?$con->real_escape_string($_POST['id_pengadaan']):'';
 	$id_bahan = isset($_POST['id_bahan'])?$con->real_escape_string($_POST['id_bahan']):'';
-	$nama_bahan = isset($_POST['nama_bahan'])?$con->real_escape_string($_POST['nama_bahan']):'';
-	$satuan = isset($_POST['satuan'])?$con->real_escape_string($_POST['satuan']):'';
-	$LT = isset($_POST['LT'])?$con->real_escape_string($_POST['LT']):'';
+	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
+	$tgl_pengadaan = isset($_POST['tgl_pengadaan'])?$con->real_escape_string($_POST['tgl_pengadaan']):'';
+	$keterangan = isset($_POST['keterangan'])?$con->real_escape_string($_POST['keterangan']):'';
+
+	$id_user = 4;
 
 	if($_POST['btnSimpan']=="Tambah"){
-		$sql = "INSERT INTO bahan (nama_bahan, satuan, jumlah, LT)  VALUES ('$nama_bahan', '$satuan', 0, $LT)";
+		$sql = "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan)  VALUES ($id_user, $id_bahan, '$tgl_pengadaan', $jumlah, '$keterangan')";
 		$proses = mysqli_query($con, $sql);
 	}else if($_POST['btnSimpan']=="Ubah"){
-		$sql = "UPDATE bahan SET nama_bahan = '$nama_bahan',  satuan = '$satuan', LT = $LT WHERE id_bahan = '$id_bahan'";
+		$sql = "UPDATE pengadaan SET id_user = $id_user, id_bahan = '$id_bahan', tgl_pengadaan = '$tgl_pengadaan', jumlah = '$jumlah', keterangan = '$keterangan' WHERE id_pengadaan = '$id_pengadaan'";
 		$proses = mysqli_query($con, $sql);
 	}
-
 	if($proses){
 		$_SESSION["flash"]["type"] = "success";
 		$_SESSION["flash"]["head"] = "Sukses";
@@ -27,12 +28,12 @@ if(isset($_POST['btnSimpan'])){
 		echo mysqli_error($con);
 	}
 
-	header("location:../index.php?p=bahan");
+	header("location:../index.php?p=pengadaan_bb");
 }
 
 if(isset($_GET['id'])){
-	$nip = isset($_GET['id'])?$con->real_escape_string($_GET['id']):'';
-	$sql = "DELETE FROM bahan WHERE id_bahan = '$nip'";
+	$id = isset($_GET['id'])?$con->real_escape_string($_GET['id']):'';
+	$sql = "DELETE FROM pengadaan WHERE id_pengadaan = '$id'";
 
 	$proses = mysqli_query($con, $sql);
 	if($proses){
@@ -44,7 +45,8 @@ if(isset($_GET['id'])){
 		$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
 		$_SESSION["flash"]["msg"] = "Data gagal dihapus!";
 	}
-	header("location:../index.php?p=bahan");
+	header("location:../index.php?p=pengadaan_bb");
 }
 
 ?>
+

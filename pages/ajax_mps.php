@@ -22,14 +22,15 @@
             $i=0;
             $b = $_GET['table'];
             $bln = "00$b";
+            $thn = date("Y");
             $bln = substr($bln, strlen($bln)-2, 2);
             $sql = "SELECT 
                         b.nama_bom, 
                         b.satuan,
-                        SUM( IF(WEEK(a.tanggal) - WEEK('2020-$bln-01') = 1, a.jumlah, 0) ) AS M1,
-                        SUM( IF(WEEK(a.tanggal) - WEEK('2020-$bln-01') = 2, a.jumlah, 0) ) AS M2,
-                        SUM( IF(WEEK(a.tanggal) - WEEK('2020-$bln-01') = 3, a.jumlah, 0) ) AS M3,
-                        SUM( IF(WEEK(a.tanggal) - WEEK('2020-$bln-01') = 4, a.jumlah, 0) ) AS M4
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 1, a.jumlah, 0) ) AS M1,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 2, a.jumlah, 0) ) AS M2,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 3, a.jumlah, 0) ) AS M3,
+                        SUM( IF(WEEK(a.tanggal) - WEEK('$thn-$bln-01') = 4, a.jumlah, 0) ) AS M4
                     FROM permintaan a 
                     JOIN bom b ON a.id_bom = b.id_bom 
                     WHERE a.id_bom = $id_bom

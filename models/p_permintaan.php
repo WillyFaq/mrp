@@ -23,6 +23,7 @@ if(isset($_POST['btnSimpan'])){
                 b.satuan,
                 d.id_bahan,
                 d.nama_bahan,
+                d.LT,
                 c.jumlah AS 'per_parent',
                 c.level
             FROM permintaan a 
@@ -41,7 +42,8 @@ if(isset($_POST['btnSimpan'])){
                         'jumlah' => $row['jumlah'],
                         'per_parent' => $row['per_parent'],
                         'level' => $row['level'],
-                        'butuh' => $jml
+                        'butuh' => $jml,
+                        'LT' => $row['LT']
                         );
         }else{
             $d = array(
@@ -49,7 +51,8 @@ if(isset($_POST['btnSimpan'])){
                         'jumlah' => $row['jumlah'],
                         'per_parent' => $row['per_parent'],
                         'level' => $row['level'],
-                        'butuh' => $jml * $row['per_parent']
+                        'butuh' => $jml * $row['per_parent'],
+                        'LT' => $row['LT']
                         );
         }
         $tmp_data[$row['id_permintaan']][$row['id_bahan']] = $d;
@@ -57,6 +60,7 @@ if(isset($_POST['btnSimpan'])){
     $max = [];
     $sum = [];
     $count = [];
+    $LT_arr = [];
     foreach ($tmp_data as $k => $v) {
         foreach ($v as $a => $b) {
             if(!isset($max[$a])){
@@ -73,6 +77,7 @@ if(isset($_POST['btnSimpan'])){
                 $sum[$a] += $b['butuh'];
                 $count[$a] += 1;
             }
+            $LT_arr[$a] = $b['LT'];
         }
     }
     $avg = [];
@@ -81,17 +86,12 @@ if(isset($_POST['btnSimpan'])){
     }
     $data = [];
     foreach ($sum as $k => $v) {
-        $ss = $max[$k] - $avg[$k];
-        $rop = $ss + $avg[$k];
-        /*$data[$k] = array(
-                        'ss' => $ss,
-                        'rop' => $ss + $avg[$k]
-                        ); */
+        $LTD = $LT_arr[$k] * $avg[$k];
+        $ss = ($LT_arr[$k] * $max[$k]) - ($LT_arr[$k] * $avg[$k]);
+        $rop = $ss + $LTD;
         $sql = "UPDATE bahan SET ss = $ss, rop = $rop WHERE id_bahan = $k";
 		$pp = mysqli_query($con, $sql);
     }
-
-
 
 	if($proses){
 		$_SESSION["flash"]["type"] = "success";

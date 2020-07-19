@@ -15,6 +15,7 @@
 			$id_bahan = $row['id_bahan'];
             $nama_bahan = $row['nama_bahan'];
             $satuan = $row['satuan'];
+            $LT = $row['LT'];
 		}
 	}
 
@@ -42,6 +43,7 @@
             				<th>No</th>
             				<th>Nama Bahan</th>
             				<th>Jumlah</th>
+                            <th>Lead Time</th>
             				<th>Aksi</th>
             			</tr>
             		</thead>
@@ -56,6 +58,7 @@
             				<td><?= ++$i; ?></td>
                             <td><?= $row['nama_bahan']; ?></td>
                             <td><?= $row['jumlah'].' '.$row['satuan']; ?></td>
+                            <td><?= $row['LT']." Minggu"; ?></td>
             				<td>
                                 <a href="index.php?p=bahan&ket=ubah&id=<?= $row['id_bahan'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
                                 <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_bahan'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
@@ -91,6 +94,17 @@
                                     }
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="LT" class="col-sm-2 col-form-label">Lead Time</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" min="1" step="1" class="form-control" name="LT" id="LT" placeholder="Lead Time" value="<?= isset($LT)?$LT:''; ?>" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Minggu</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
