@@ -7,15 +7,20 @@
 </div>
 <?php
 	if(isset($_GET['ket'])){
+        $page = $_GET['ket'];
 		$ket = join(explode("_", $_GET['ket']), " ");
 	}
 
 ?>
+<iframe class="iframe_cetak" src="" width="0" height="0" frameborder="0"></iframe>
 <div class="row row_angket">
 	<div class="col mb-4">
 		<div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Laporan <?= ucwords($ket); ?></h6>
+                <div class="dropdown no-arrow">
+                    <a href="#" data-href="pages/cetak_laporan.php?cetak=<?= $page; ?>" class="btn btn-warning btn-cetak" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
+                </div>
             </div>
             <div class="card-body">
             <?php
@@ -37,4 +42,12 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".btn-cetak").click(function(){
+            var href = $(this).attr("data-href");
+            $(".iframe_cetak").attr("src", href);
+            return false;
+        });
+    });
+</script>

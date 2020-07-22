@@ -90,3 +90,27 @@ body::-webkit-scrollbar-thumb:hover {
 .sidebar .nav-item .nav-link{
 	padding: 0.5rem 1rem !important;
 }
+
+.scroll_notification{
+	height: 150px;
+	overflow-y: scroll; 
+}
+
+.scroll_notification::-webkit-scrollbar {
+  	width: 5px;
+}
+
+/* Track */
+.scroll_notification::-webkit-scrollbar-track {
+  	background: #f1f1f1; 
+}
+ 
+/* Handle */
+.scroll_notification::-webkit-scrollbar-thumb {
+  	background: #888; 
+}
+
+/* Handle on hover */
+.scroll_notification::-webkit-scrollbar-thumb:hover {
+  	background: #555; 
+}

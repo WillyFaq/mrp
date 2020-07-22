@@ -1,3 +1,7 @@
+<?php
+    if(!isset($ctk)){
+    
+?>
 <style>
     .dataTables_filter{
         display: none;
@@ -68,6 +72,21 @@
         $(".inp_filter").change(function(){
             table.draw();
         });
+
+        $("#tgl1").change(function(){
+            var v = $(this).val();
+            console.log(v);
+            var href = $(".btn-cetak").attr("data-href");
+            href += "&tgl1="+v;
+            $(".btn-cetak").attr("data-href", href);
+        });
+        $("#tgl2").change(function(){
+            var v = $(this).val();
+            console.log(v);
+            var href = $(".btn-cetak").attr("data-href");
+            href += "&tgl2="+v;
+            $(".btn-cetak").attr("data-href", href);
+        });
     });
 
     $.fn.dataTable.ext.search.push(
@@ -106,3 +125,59 @@
     );
     
 </script>
+<?php }else{ ?>
+<?php
+    $whr = "";
+    if(isset($_GET['tgl1']) || isset($_GET['tgl2']) ){
+        if(isset($_GET['tgl1'])){
+            $tgl1 = $_GET['tgl1'];
+            $whr = " AND a.tgl_pengadaan >= '$tgl1' ";
+        }
+        if(isset($_GET['tgl2'])){
+            $tgl2 = $_GET['tgl2'];
+            $whr .= " AND a.tgl_pengadaan <= '$tgl2' ";
+        }
+?>
+<p>Pertanggal : <?= date("d-m-Y", strtotime($tgl1)); ?> s/d <?= date("d-m-Y", strtotime($tgl2)); ?></p>
+<br>
+<?php } ?>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Bahan</th>
+            <th>Tangal Pengadaan</th>
+            <th>Jumlah</th>
+            <th>Oleh</th>
+            <th>Keterangan</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+        $i=0;
+        $sql = "SELECT 
+                    a.*, 
+                    b.nama_user, 
+                    c.nama_bahan, 
+                    c.satuan
+                FROM pengadaan a 
+                JOIN user b ON a.id_user = b.id_user 
+                JOIN bahan c ON a.id_bahan = c.id_bahan 
+                WHERE a.sts = 0 $whr
+                ORDER BY a.tgl_pengadaan DESC";
+        $q = mysqli_query($con, $sql);
+        while($row = mysqli_fetch_array($q)):
+    ?>
+        <tr>
+            <td><?= ++$i; ?></td>
+            <td><?= $row['nama_bahan']; ?></td>
+            <td><?= date("d-m-Y", strtotime($row['tgl_pengadaan'])); ?></td>
+            <td><?= $row['jumlah']." ".$row['satuan']; ?></td>
+            <td><?= $row['nama_user']; ?></td>
+            <td><?= $row['keterangan']; ?></td>
+        </tr>
+    <?php endwhile; ?>
+    </tbody>
+</table>
+<?php } ?>
