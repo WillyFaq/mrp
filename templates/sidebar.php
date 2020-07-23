@@ -143,7 +143,7 @@ $menu = [
 
 //$jabatan = [0, 1, 2, 3, 4, 5];
 $akses = [
-            [8],
+            [8, 81, 82, 83, 84, 85, 86],
             [0, 1, 2, 3, 4, 5, 8, 81, 82, 83, 84, 85, 86],
             [6, 7, 8, 82, 83],
             [8, 84, 85],
@@ -187,7 +187,7 @@ $akses = [
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <?php foreach($b['child'] as $x => $z):?>
                                     <?php if(in_array($z['id'], $akses[$_SESSION['type']])): ?>
-                                    <a class="collapse-item" href="<?= $b['link'].$z['link'];?>"><?= $z['text']; ?></a>
+                                    <a class="collapse-item subnav" id="<?= str_replace(".php", "", $z['pages']);?>" href="<?= $b['link'].$z['link'];?>"><?= $z['text']; ?></a>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </div>

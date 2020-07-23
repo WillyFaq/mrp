@@ -114,3 +114,8 @@ body::-webkit-scrollbar-thumb:hover {
 .scroll_notification::-webkit-scrollbar-thumb:hover {
   	background: #555; 
 }
+
+.subnav:hover, .subnav_active{
+	background: #353B40 !important;
+	color: #FFF !important;
+}
