@@ -9,19 +9,8 @@
         $form = $ket;
         if($ket == "ubah"){
             $id = $_GET['id'];
-            $sql = "SELECT a.*, b.nama_user, c.nama_bahan, c.satuan FROM pengadaan a JOIN user b ON a.id_user = b.id_user JOIN bahan c ON a.id_bahan = c.id_bahan WHERE a.id_pengadaan = $id";
-            $q = mysqli_query($con, $sql);
-            $row = mysqli_fetch_array($q);
-            $id_pengadaan = $row['id_pengadaan'];
-            $id_bahan = $row['id_bahan'];
-            $nama_bahan = $row['nama_bahan'];
-            $satuan = $row['satuan'];
-            $jumlah = $row['jumlah'];
-            $tgl_pengadaan = $row['tgl_pengadaan'];
-            $keterangan = $row['keterangan'];
-            $oleh = $row['nama_user'];
             
-            $ket = "Penrimaan";
+            
         }
     }
 
@@ -35,7 +24,7 @@
                 if(!isset($_GET['ket'])){
                 ?>
                 <div class="dropdown no-arrow">
-                    <a href="index.php?p=penerimaan_bb&ket=tambah" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><i class="fa fa-plus"></i></a>
+                    <a href="index.php?p=pengeluaran_bb&ket=tambah" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><i class="fa fa-plus"></i></a>
                 </div>
                 <?php } ?>
             </div>
@@ -68,14 +57,14 @@
                             <td><?= date("d-m-Y", strtotime($row['tgl_pengeluaran'])); ?></td>
                             <td><?= $row['keterangan']; ?></td>
                             <td>
-                                <a href="index.php?p=penerimaan_bb&ket=ubah&id=<?= $row['id_pengeluaran'] ?>" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Terima"><i class="fa fa-check"></i></a>
+                                <a href="models/p_pengeluaran_bb.php?ket=keluar&id=<?= $row['id_pengeluaran'] ?>" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Keluar"><i class="fa fa-check"></i></a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                     </tbody>
                 </table>
                 <?php else: ?>
-                <form method="post" action="models/p_penerimaan_bb.php">
+                <form method="post" action="models/p_pengeluaran_bb.php">
                     <input type="hidden" id="id_pengadaan" name="id_pengadaan" value="<?= isset($id_pengadaan)?$id_pengadaan:''; ?>" >
                     <div class="form-group row">
                         <label for="nama_bahan" class="col-sm-2 col-form-label">Nama Bahan</label>
