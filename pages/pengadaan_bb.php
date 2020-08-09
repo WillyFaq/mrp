@@ -150,7 +150,7 @@
         $(".btn-hapus").click(function(){
             var id = $(this).attr("data-id");
             $('#hapusModal').modal('show');
-            $(".btnhapus-link").attr("href", "models/p_permintaan_bb.php?id="+id);
+            $(".btnhapus-link").attr("href", "models/p_pengadaan_bb.php?id="+id);
             //$(".load-modal").load('models/ajax_user.php?nip='+id);
         });
     });

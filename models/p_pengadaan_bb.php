@@ -33,6 +33,25 @@ if(isset($_POST['btnSimpan'])){
 
 if(isset($_GET['id'])){
 	$id = isset($_GET['id'])?$con->real_escape_string($_GET['id']):'';
+	$sql = "SELECT * FROM pengadaan WHERE id_pengadaan = '$id'";
+	$q = mysqli_query($con, $sql);
+	$sts = 0;
+	while($row = mysqli_fetch_array($q)){
+		$sts = $row['sts'];
+		$jml = $row['jumlah'];
+		if($sts != 0){
+			$sql = "SELECT * FROM bahan WHERE id_bahan = $row[id_bahan]";
+			$q = mysqli_query($con, $sql);
+			$jmlbhn = 0;
+			while($brow = mysqli_fetch_array($q)){
+				$jmlbhn = $brow['jumlah'];
+			}
+			$jml = $jmlbhn - $jml;
+			$sql = "UPDATE bahan SET jumlah = $jml WHERE id_bahan = $row[id_bahan]";
+		}
+	}
+
+
 	$sql = "DELETE FROM pengadaan WHERE id_pengadaan = '$id'";
 
 	$proses = mysqli_query($con, $sql);
