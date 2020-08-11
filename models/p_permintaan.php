@@ -12,11 +12,83 @@ if(isset($_POST['btnSimpan'])){
 		$sql = "INSERT INTO permintaan (id_bom, jumlah, tanggal)  VALUES ($id_bom, $jumlah, '$tanggal')";
 		$proses = mysqli_query($con, $sql);
 	}else if($_POST['btnSimpan']=="Ubah"){
-		$sql = "UPDATE permintaan SET id_bom = $id_bom, jumlah = $jumlah, tanggal = '$tanggal' WHERE id_permintaan = $id_permintaan";
-		$proses = mysqli_query($con, $sql);
+        $sql = "SELECT * FROM permintaan WHERE id_permintaan = $id_permintaan";
+        $q = mysqli_query($con, $sql);
+        while($row = mysqli_fetch_array($q)){
+            $tgl = $row['tanggal'];
+        }
+        if(cek_mps($con, $tgl)){
+            $_SESSION["flash"]["type"] = "danger";
+            $_SESSION["flash"]["head"] = "Terjadi Kesalahan";
+            $_SESSION["flash"]["msg"] = "Data sedang digunakan!";
+
+            header("location:../index.php?p=permintaan");
+            exit();
+        }else{
+    		$sql = "UPDATE permintaan SET id_bom = $id_bom, jumlah = $jumlah, tanggal = '$tanggal' WHERE id_permintaan = $id_permintaan";
+    		$proses = mysqli_query($con, $sql);
+        }
 	}
 
-	$tmp_data = [];
+	ssdanrop($con);
+
+	if($proses){
+		$_SESSION["flash"]["type"] = "success";
+		$_SESSION["flash"]["head"] = "Sukses";
+		$_SESSION["flash"]["msg"] = "Data berhasil disimpan!";
+	}else{
+		$_SESSION["flash"]["type"] = "danger";
+		$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
+		$_SESSION["flash"]["msg"] = "Data gagal disimpan!";
+		echo mysqli_error($con);
+	}
+
+	header("location:../index.php?p=permintaan");
+}
+
+if(isset($_GET['id'])){
+	$id = isset($_GET['id'])?$con->real_escape_string($_GET['id']):'';
+
+    $sql = "SELECT * FROM permintaan WHERE id_permintaan = $id";
+    $q = mysqli_query($con, $sql);
+    while($row = mysqli_fetch_array($q)){
+        $tgl = $row['tanggal'];
+    }
+    if(cek_mps($con, $tgl)){
+        $_SESSION["flash"]["type"] = "danger";
+        $_SESSION["flash"]["head"] = "Terjadi Kesalahan";
+        $_SESSION["flash"]["msg"] = "Data sedang digunakan!";
+    }else{
+        $sql = "DELETE FROM permintaan WHERE id_permintaan = '$id'";
+        $proses = mysqli_query($con, $sql);
+        if($proses){
+            ssdanrop($con);
+            $_SESSION["flash"]["type"] = "success";
+            $_SESSION["flash"]["head"] = "Sukses";
+            $_SESSION["flash"]["msg"] = "Data berhasil dihapus!";
+        }else{
+            $_SESSION["flash"]["type"] = "danger";
+            $_SESSION["flash"]["head"] = "Terjadi Kesalahan";
+            $_SESSION["flash"]["msg"] = "Data gagal dihapus!";
+        }   
+    }
+	
+	header("location:../index.php?p=permintaan");
+}
+
+function cek_mps($con, $tgl){
+    $sql = "SELECT * FROM mps WHERE MONTH(bulan) = MONTH('$tgl')";
+    $q = mysqli_query($con, $sql);
+    $nr = mysqli_num_rows($q);
+    if($nr>0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function ssdanrop($con){
+    $tmp_data = [];
     $sql = "SELECT 
                 a.*, 
                 b.nama_bom, 
@@ -90,38 +162,9 @@ if(isset($_POST['btnSimpan'])){
         $ss = ($LT_arr[$k] * $max[$k]) - ($LT_arr[$k] * $avg[$k]);
         $rop = $ss + $LTD;
         $sql = "UPDATE bahan SET ss = $ss, rop = $rop WHERE id_bahan = $k";
-		$pp = mysqli_query($con, $sql);
+        $pp = mysqli_query($con, $sql);
+        //echo '<script>alert("'.$sql.'");</script>';
     }
-
-	if($proses){
-		$_SESSION["flash"]["type"] = "success";
-		$_SESSION["flash"]["head"] = "Sukses";
-		$_SESSION["flash"]["msg"] = "Data berhasil disimpan!";
-	}else{
-		$_SESSION["flash"]["type"] = "danger";
-		$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
-		$_SESSION["flash"]["msg"] = "Data gagal disimpan!";
-		echo mysqli_error($con);
-	}
-
-	header("location:../index.php?p=permintaan");
-}
-
-if(isset($_GET['id'])){
-	$id = isset($_GET['id'])?$con->real_escape_string($_GET['id']):'';
-	$sql = "DELETE FROM permintaan WHERE id_permintaan = '$id'";
-
-	$proses = mysqli_query($con, $sql);
-	if($proses){
-		$_SESSION["flash"]["type"] = "success";
-		$_SESSION["flash"]["head"] = "Sukses";
-		$_SESSION["flash"]["msg"] = "Data berhasil dihapus!";
-	}else{
-		$_SESSION["flash"]["type"] = "danger";
-		$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
-		$_SESSION["flash"]["msg"] = "Data gagal dihapus!";
-	}
-	header("location:../index.php?p=permintaan");
 }
 
 ?>
