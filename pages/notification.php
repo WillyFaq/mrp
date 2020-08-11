@@ -1,4 +1,4 @@
-<?php if($_SESSION['type']==1): ?>
+<?php if($_SESSION['type']==3): ?>
 <?php
     $sql = "SELECT * FROM bahan";
     $q = mysqli_query($con, $sql);

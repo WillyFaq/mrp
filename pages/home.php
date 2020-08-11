@@ -126,7 +126,7 @@
 	foreach ($tmp_data as $key => $value) {
 		$data_line[$value['id_bom']]["data"][] = $value['jumlah'];
 	}
-
+	print_r($data_line);
 ?>
 </pre>
 
