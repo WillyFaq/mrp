@@ -151,7 +151,7 @@
 			                $cur = $row['id_bahan'];
 			            }else{
 			                $jml = $data[$cur]['mrp']['GR'][$k];
-			                $GR[$k] = $jml * $row['jumlah'];//($row['jumlah'] * $v);
+			                $GR[$k] = $jml * $row['jumlah'];
 			            }
 			        }
 			        $SR[$k]=0;
