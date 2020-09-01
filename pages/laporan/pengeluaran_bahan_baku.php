@@ -35,7 +35,7 @@
     <tbody>
     <?php
         $i=0;
-        $sql = "SELECT a.*, c.nama_bahan, c.satuan FROM pengeluaran a JOIN bahan c ON a.id_bahan = c.id_bahan WHERE a.sts = 0 ORDER BY a.tgl_pengeluaran DESC";
+        $sql = "SELECT a.*, c.nama_bahan, c.satuan FROM pengeluaran a JOIN bahan c ON a.id_bahan = c.id_bahan WHERE a.sts = 1 ORDER BY a.tgl_pengeluaran DESC";
         $q = mysqli_query($con, $sql);
         while($row = mysqli_fetch_array($q)):
     ?>

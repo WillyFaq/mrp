@@ -5,14 +5,16 @@
 
         $b = $_GET['table'];
         $thn = date("Y");
-        $sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom WHERE MONTH(a.bulan) = $b AND YEAR(a.bulan) = $thn AND a.id_bom = $id_bom ORDER BY bulan DESC";
+        $sql = "SELECT * FROM mps a JOIN bom b ON a.id_bom = b.id_bom 
+                WHERE MONTH(a.bulan) = $b AND YEAR(a.bulan) = $thn AND a.id_bom = $id_bom 
+                ORDER BY bulan DESC";
         $q = mysqli_query($con, $sql);
         if(mysqli_num_rows($q)>0):
 ?>
 	<table class="table table-bordered tbl_mrp">
 		<thead class="thead-dark">
 			<tr>
-				<th width="28%" rowspan="2">Menu</th>
+				<th width="28%" rowspan="2">Produk</th>
 				<th colspan="4">Minggu</th>
 			</tr>
             <tr>
@@ -33,7 +35,7 @@
                 $mps[] = $row["M4"];
         ?>
             <tr>
-                <td class="text-left"><?= $row['nama_bom']; ?></td>
+                <td class="text-left"><?= $row['nama_bom']; ?> (<?= $row['satuan']; ?>)</td>
                 <td>
                     <?= $row['M1']; ?>
                 </td>
@@ -64,8 +66,8 @@ while($row = mysqli_fetch_array($q)){
 
 $sql = "SELECT * FROM mrp WHERE id_bahan IN (".join($id_bahan, ",").") AND MONTH(bulan) = $b";
 $q = mysqli_query($con, $sql);
-
 if(mysqli_num_rows($q)>0){
+
     $sql = "SELECT
                 a.id_mrp,
                 a.id_bahan,
@@ -121,6 +123,7 @@ if(mysqli_num_rows($q)>0){
 
 }else{
     $data = $mrp->get_mrp($con, $id_bom, $mps, $b, $thn);
+    
     $data_porel = $mrp->get_porel();
 
     foreach ($data_porel as $key => $value) {

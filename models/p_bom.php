@@ -42,12 +42,38 @@ if(isset($_POST['btnSimpan'])){
 			$id_bahan = $v;
 			$jml_bahan = $_POST['jumlah_bahan'][$k];
 			$lvl_bahan = $_POST['level_bahan'][$k];
-			//echo "$id_bahan - $jml_bahan - $lvl_bahan <br>";
-			$sql2 = "INSERT INTO bom_detail (id_bom, id_bahan, jumlah, level) VALUES ($id_bom, $id_bahan, $jml_bahan, $lvl_bahan)";
+			$parent = $_POST['parent_bahan'][$k];
+			$sql = "SELECT * FROM bom_detail WHERE id_bom = $id_bom AND id_bahan = $id_bahan AND parent = $parent";
+			$q = mysqli_query($con, $sql);
+			if(mysqli_num_rows($q)>0){
+				$sql2 = "UPDATE bom_detail SET jumlah = $jml_bahan, level = $lvl_bahan, parent = $parent WHERE id_bom = $id_bom AND id_bahan = $id_bahan";
+			}else{
+				$sql2 = "INSERT INTO bom_detail (id_bom, id_bahan, jumlah, level, parent) VALUES ($id_bom, $id_bahan, $jml_bahan, $lvl_bahan, $parent)";
+			}
+			echo $sql2."<br>";
 			if(mysqli_query($con, $sql2)){
 				$proses[] = 1;
 			}else{
 				$proses[] = 0;
+			}
+		}
+		$sql = "SELECT id_bahan,parent FROM bom_detail WHERE id_bom = $id_bom";
+		$q = mysqli_query($con, $sql);
+		$idbarr = [];
+		$parr = [];
+		while($row = mysqli_fetch_array($q)){
+			$idbarr[] = $row['id_bahan'];
+			$parr[] = $row['parent'];
+		}
+		foreach ($idbarr as $k => $v) {
+			if(!in_array($v, $_POST['id_bahan'])){
+				$p = $parr[$k];
+				$sqlqq = "DELETE FROM bom_detail WHERE id_bom = $id_bom AND id_bahan = $v AND parent = $p";
+				if(mysqli_query($con, $sqlqq)){
+					$proses[] = 1;
+				}else{
+					$proses[] = 0;
+				}
 			}
 		}
 	}else{

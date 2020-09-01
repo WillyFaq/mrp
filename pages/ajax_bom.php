@@ -5,7 +5,7 @@
 	<thead>
 		<tr>
 			<th>No</th>
-			<th>Nama BOM</th>
+			<th>Produk</th>
 			<th>Jumlah</th>
 			<th>Bahan</th>
 			<th>Aksi</th>
@@ -26,10 +26,16 @@
                 <pre>
 <?php
     $bahan = get_bahan($row['id_bom']);
+    $ret = "";
     foreach ($bahan as $k => $v) {
-        $level = (int)$v['level'] - 1;
-        echo gen_tab($level)."|_ $v[nama_bahan] - $v[jumlah] $v[satuan]<br>";
+        $ret .= "|_ $v[nama_bahan] - $v[jumlah] $v[satuan]<br>";
+        if(isset($v['child'])){
+            foreach ($v['child'] as $a => $b) {
+                $ret .= "\t|_ $b[nama_bahan] - $b[jumlah] $b[satuan]<br>";
+            }
+        }
     }
+    echo $ret;
 ?>
                 </pre>
             </td>

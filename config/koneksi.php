@@ -46,38 +46,22 @@
 									'level' => $row['level'],
 									'nama_bahan' => $row['nama_bahan'],
 									'satuan' => $row['satuan'],
+									'parent' => $row['parent']
 									);  
-			/*if($row['level']==1){
-				$data[$id] = array(
-									'id_menu_detail' => $row['id_menu_detail'],
-									'id_bahan' => $row['id_bahan'],
-									'jumlah' => $row['jumlah'],
-									'level' => $row['level'],
-									'nama_bahan' => $row['nama_bahan'],
-									'satuan' => $row['satuan'],
-									);  
-				$id++;
-
-			}else{
-				if(!isset($current_level)){
-					$current_level = $row['level'];
-				}
-				if(!isset($j)){
-					$j==0;
-				}
-				$parent = $id-1;
-				$data[$parent]['child'][] = array(
-											'id_menu_detail' => $row['id_menu_detail'],
-											'id_bahan' => $row['id_bahan'],
-											'jumlah' => $row['jumlah'],
-											'level' => $row['level'],
-											'nama_bahan' => $row['nama_bahan'],
-											'satuan' => $row['satuan'],
-											);
-				$j++;
-			}*/
 		}
-		return $data;
+		$tmp_data = [];
+		foreach ($data as $k => $v) {
+			if($v['level']==1){
+				$tmp_data[$v['id_bahan']] = $v;
+			}
+		}
+		foreach ($data as $k => $v) {
+			if($v['level']==2){
+				$tmp_data[$v['parent']]['child'][] = $v;
+			}
+		}
+		
+		return $tmp_data;
 	}
 
 	function gen_tab($jml=0){
@@ -103,6 +87,7 @@
 					"September",
 					"Oktober",
 					"November",
+					"Desember",
 				];
 		unset($bulan[0]);
 		if($bln!=''){
@@ -182,7 +167,7 @@
 			                    jumlah,
 			                    WEEK(tgl_pengadaan) - WEEK('$thn-$bln-01') AS 'minggu' 
 			                FROM pengadaan
-			                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan]";
+			                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan] AND sts <> 0";
 			    $q_sr = mysqli_query($con, $sql_sr);
 			    while($row_sr = mysqli_fetch_array($q_sr)){
 			        if($row_sr['minggu']==0){
@@ -234,7 +219,7 @@
 			                $data[$key]['mrp']['POR'][$a] += $c - $ohi;
 			                $data[$key]['mrp']['OHI'][$a] = $ohi;
 			            }else{
-			                if($a+1 <= 3){
+			                if($a+1 <= 4){
 			                    $data[$key]['mrp']['OHI'][$a+1] = $kur;
 			                }
 			            }
@@ -253,7 +238,6 @@
 			        }
 			    }
 			}
-
 			return $data;
 		}
 

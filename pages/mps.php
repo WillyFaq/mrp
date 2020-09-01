@@ -82,7 +82,7 @@
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
-                            <th rowspan="2">Menu</th>
+                            <th rowspan="2">Produk</th>
                             <th rowspan="2">Bulan</th>
                             <th colspan="4">Minggu</th>
                             <th rowspan="2">Aksi</th>
@@ -120,9 +120,9 @@
                 <form method="post" action="models/p_mps.php">
                     <input type="hidden" name="id_mps" value="<?= isset($id_mps)?$id_mps:''; ?>" >
                     <div class="form-group row">
-                        <label for="menu" class="col-sm-2 col-form-label">Menu</label>
+                        <label for="menu" class="col-sm-2 col-form-label">Produk</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="menu" id="menu" placeholder="Menu" value="<?= isset($nama_bom)?$nama_bom:''; ?>" required>
+                            <input type="text" class="form-control" name="menu" id="menu" placeholder="Produk" value="<?= isset($nama_bom)?$nama_bom:''; ?>" required>
                         </div>
                         <input type="hidden" id="id_bom" name="id_bom" value="<?= isset($id_bom)?$id_bom:''; ?>" required>
                     </div>
