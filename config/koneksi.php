@@ -154,6 +154,7 @@
 			                $GR[$k] = $jml * $row['jumlah'];
 			            }
 			        }
+			        
 			        $SR[$k]=0;
 			        $OHI[$k]=0;
 			        $NR[$k]=0;
