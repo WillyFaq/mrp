@@ -85,7 +85,7 @@
                             <td>
                                 <a href="index.php?p=bom&ket=detail&id=<?= $row['id_bom'] ?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-eye"></i></a>
                                 <a href="index.php?p=bom&ket=ubah&id=<?= $row['id_bom'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
-                                <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="<?= $row['id_bom'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
+                                <button type="button" class="btn btn-sm btn-danger btn-hapus"  data-id="<?= $row['id_bom'] ?>" data-toggle="tooltip" data-placement="top" title="Hapus">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
