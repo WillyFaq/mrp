@@ -64,7 +64,8 @@ while($row = mysqli_fetch_array($q)){
     $id_bahan[] = $row['id_bahan'];
 }
 
-$sql = "SELECT * FROM mrp WHERE id_bahan IN (".join($id_bahan, ",").") AND MONTH(bulan) = $b";
+//$sql = "SELECT * FROM mrp WHERE id_bom = $id_bom AND id_bahan IN (".join($id_bahan, ",").") AND MONTH(bulan) = $b";
+$sql = "SELECT * FROM mrp WHERE id_bom = $id_bom AND id_bahan IN (".join($id_bahan, ",").") AND MONTH(bulan) = $b";
 $q = mysqli_query($con, $sql);
 if(mysqli_num_rows($q)>0){
 
@@ -86,7 +87,9 @@ if(mysqli_num_rows($q)>0){
                 a.POREL
             FROM mrp a
             JOIN bom_detail b ON a.id_bahan = b.id_bahan
-            JOIN bahan c ON b.id_bahan = c.id_bahan";
+            JOIN bahan c ON b.id_bahan = c.id_bahan
+            WHERE a.id_bom = $id_bom";
+        //echo $sql;
     $q = mysqli_query($con, $sql);
     $tmp_data = [];
     while($row = mysqli_fetch_array($q)){
@@ -122,6 +125,7 @@ if(mysqli_num_rows($q)>0){
     
 
 }else{
+    //echo "disini";
     $data = $mrp->get_mrp($con, $id_bom, $mps, $b, $thn);
     
     $data_porel = $mrp->get_porel();
@@ -154,8 +158,8 @@ if(mysqli_num_rows($q)>0){
             $p = $value['mrp']['POR'][$i];
             $pr = $value['mrp']['PORel'][$i];
             $week = date("Y-m-d", strtotime($weeks[$i]));
-            $sql = "INSERT INTO mrp (id_bahan, bulan, minggu, GR, SR, OHI, NR, POR, POREL) VALUES ";
-            $sql .= "($value[id_bahan], '$week', $i, $g, $s, $o, $n, $p, $pr)";
+            $sql = "INSERT INTO mrp (id_bom, id_bahan, bulan, minggu, GR, SR, OHI, NR, POR, POREL) VALUES ";
+            $sql .= "($id_bom, $value[id_bahan], '$week', $i, $g, $s, $o, $n, $p, $pr)";
             //echo "$sql<br>";
             if(mysqli_query($con, $sql)){
                 $process[] = 1; 
@@ -184,14 +188,16 @@ if(mysqli_num_rows($q)>0){
     foreach ($data as $key => $value) {
         foreach ($value['mrp']["GR"] as $k => $v) {
             if($k>0){
-                $weeks = get_week($b, $thn);
-                $week = date("Y-m-d", strtotime($weeks[$k]));
-                $sql = "INSERT INTO pengeluaran (id_bahan, tgl_pengeluaran, jumlah, keterangan, sts) VALUES ";
-                $sql .= "($key, '$week', $v, 'Produksi', 0)";
-                if(mysqli_query($con, $sql)){
-                    $process[] = 1; 
-                }else{
-                    $process[] = 0; 
+                if($v>0){
+                    $weeks = get_week($b, $thn);
+                    $week = date("Y-m-d", strtotime($weeks[$k]));
+                    $sql = "INSERT INTO pengeluaran (id_bahan, tgl_pengeluaran, jumlah, keterangan, sts) VALUES ";
+                    $sql .= "($key, '$week', $v, 'Produksi', 0)";
+                    if(mysqli_query($con, $sql)){
+                        $process[] = 1; 
+                    }else{
+                        $process[] = 0; 
+                    }
                 }
             }
         }
