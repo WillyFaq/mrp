@@ -7,7 +7,7 @@
 		<thead>
 			<tr>
 				<th rowspan="2">No</th>
-				<th rowspan="2">Menu</th>
+				<th rowspan="2">Produk</th>
 				<th colspan="4">Minggu</th>
 			</tr>
             <tr>

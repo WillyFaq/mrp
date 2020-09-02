@@ -43,7 +43,7 @@
             		<thead>
             			<tr>
             				<th>No</th>
-            				<th>Menu</th>
+            				<th>Produk</th>
             				<th>Jumlah</th>
             				<th>Tanggal</th>
             				<th>Aksi</th>

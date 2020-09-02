@@ -10,6 +10,40 @@
 <div id="chart_div"></div>
 
 <script type="text/javascript">
+/*var data_bahan = [
+	[
+		{
+			'v':'12',
+			'f':'<strong>CC</strong><div class="jml_class">1 Ton</div>',
+		},
+		'',
+		'CC'
+	],
+	[
+		{
+			'v':'1211',
+			'f':'<strong>Frit Mentah tipe A Q1</strong><div class="jml_class">5 Kg</div>',
+		},
+		'12',
+		'Frit Mentah tipe A Q1'
+	],
+	[
+		{
+			'v':'1231',
+			'f':'<strong>Frit Mentah tipe B Q2</strong><div class="jml_class">5 Kg</div>',
+		},
+		'12',
+		'Frit Mentah tipe B Q2'
+	],
+	[
+		{
+			'v':'1232',
+			'f':'<strong>Frit Mentah tipe B Q2</strong><div class="jml_class">5 Kg</div>',
+		},
+		'1231',
+		'Frit Mentah tipe B Q2'
+	],
+];*/
 <?php
 	echo "var data_bahan = [\n";
 	echo "\t[\n";
@@ -23,24 +57,10 @@
 	$bahan = get_bahan($id_bom);
 	$dai = '';
 	foreach ($bahan as $k => $row) {
-		if($row['level']==1){
 			$cur_id = $id_bom.$row['id_bahan'].$row['level'];
 			$ida = $cur_id;
 			$cur_level = $row['level'];
 			$parent = $id_bom;
-		}else{
-			if($cur_level==1){$cur_level++;}
-			$ida = $id_bom.$row['id_bahan'].$row['level'];
-			if($row['level'] == $cur_level){
-				$parent = $cur_id;
-				$dai = $id_bom.$row['id_bahan'].$row['level'];
-				$cur_level = $row['level'];
-			}else{
-				$cur_id = $dai;
-				$parent = $cur_id;
-				$cur_level = $row['level'];
-			}
-		}
 		echo "\t[\n";
 		echo "\t\t{\n";
 		echo "\t\t\t'v':'$ida',\n";
@@ -49,6 +69,20 @@
 		echo "\t\t'$parent',\n";
 		echo "\t\t'$row[nama_bahan]'\n";
 		echo "\t],\n";
+		if(isset($row['child'])){
+			foreach ($row['child'] as $a => $b) {
+				$parent = $ida;
+				$idac = $b['id_bahan'].$b['level'];
+				echo "\t[\n";
+				echo "\t\t{\n";
+				echo "\t\t\t'v':'$idac',\n";
+				echo "\t\t\t'f':'<strong>$b[nama_bahan]</strong><div class=\"jml_class\">$b[jumlah] $b[satuan]</div>',\n";
+				echo "\t\t},\n";
+				echo "\t\t'$parent',\n";
+				echo "\t\t'$b[nama_bahan]'\n";
+				echo "\t],\n";
+			}
+		}
 	}
 	echo "];\n";
 ?>	

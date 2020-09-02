@@ -124,7 +124,7 @@
                     <div class="form-group row">
                         <label for="tgl_penerimaan" class="col-sm-2 col-form-label">Tgl Penerimaan</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" name="tgl_penerimaan" id="tgl_penerimaan" placeholder="Tgl Penerimaan" value="<?= isset($tgl_penerimaan)?$tgl_penerimaan:''; ?>" min="<?= date('Y-m-d', strtotime($tgl_pengadaan)); ?>"  required>
+                            <input type="date" class="form-control" name="tgl_penerimaan" id="tgl_penerimaan" placeholder="Tgl Penerimaan" value="<?= isset($tgl_penerimaan)?$tgl_penerimaan:date("Y-m-d"); ?>" min="<?= date('Y-m-d', strtotime($tgl_pengadaan)); ?>"  required>
                         </div>
                     </div>
                     <div class="form-group row">
