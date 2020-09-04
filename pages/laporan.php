@@ -19,7 +19,11 @@
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Laporan <?= ucwords($ket); ?></h6>
                 <div class="dropdown no-arrow">
-                    <a href="#" data-href="pages/cetak_laporan.php?cetak=<?= $page; ?>" class="btn btn-warning btn-cetak" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
+                    <?php
+                        $lck_ctk = "pages/cetak_laporan.php?cetak=$page";
+                        if(isset($_GET['type'])) $lck_ctk .= "&type=".$_GET['type'];
+                    ?>
+                    <a href="#" data-href="<?= $lck_ctk; ?>" class="btn btn-warning btn-cetak" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
                 </div>
             </div>
             <div class="card-body">

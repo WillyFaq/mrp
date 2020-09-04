@@ -22,12 +22,12 @@
     ?>
         <tr>
             <td><?= ++$i; ?></td>
-            <td><?= $row['nama_bom']; ?></td>
+            <td><?= $row['nama_bom']." (".$row['satuan'].")"; ?></td>
             <td><?= get_bulan((int)date("m", strtotime($row['bulan']))); ?></td>
-            <td><?= $row['M1']; ?></td>
-            <td><?= $row['M2']; ?></td>
-            <td><?= $row['M3']; ?></td>
-            <td><?= $row['M4']; ?></td>
+            <td><?= $row['M1']*1000; ?></td>
+            <td><?= $row['M2']*1000; ?></td>
+            <td><?= $row['M3']*1000; ?></td>
+            <td><?= $row['M4']*1000; ?></td>
         </tr>
     <?php endwhile; ?>
     </tbody>

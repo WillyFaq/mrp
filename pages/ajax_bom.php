@@ -6,7 +6,7 @@
 		<tr>
 			<th>No</th>
 			<th>Produk</th>
-			<th>Jumlah</th>
+			<th>Satuan</th>
 			<th>Bahan</th>
 			<th>Aksi</th>
 		</tr>

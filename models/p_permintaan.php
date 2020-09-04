@@ -6,6 +6,7 @@ if(isset($_POST['btnSimpan'])){
 	$id_permintaan = isset($_POST['id_permintaan'])?$con->real_escape_string($_POST['id_permintaan']):'';
 	$id_bom = isset($_POST['id_bom'])?$con->real_escape_string($_POST['id_bom']):'';
 	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
+    $jumlah = $jumlah/1000;
 	$tanggal = isset($_POST['tanggal'])?$con->real_escape_string($_POST['tanggal']):'';
 
 	if($_POST['btnSimpan']=="Tambah"){

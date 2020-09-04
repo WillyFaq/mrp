@@ -17,10 +17,10 @@
 			$nama_bom = $row['nama_bom'];
             $satuan = $row['satuan'];
 			$bulan = (int)date("m", strtotime($row['bulan']));
-            $M1 = $row['M1'];
-            $M2 = $row['M2'];
-            $M3 = $row['M3'];
-            $M4 = $row['M4'];
+            $M1 = $row['M1'] * 1000;
+            $M2 = $row['M2'] * 1000;
+            $M3 = $row['M3'] * 1000;
+            $M4 = $row['M4'] * 1000;
 
             $bln = date("m", strtotime($row['bulan']));
             $thn = date("Y");
@@ -39,15 +39,19 @@
             while($row2 = mysqli_fetch_array($q2)){
                 if($M1<$row2["M1"]){
                     $M1=$row2["M1"];
+                    $M1 = $M1 * 1000;
                 }
                 if($M2<$row2["M2"]){
                     $M2=$row2["M2"];
+                    $M2 = $M2 * 1000;
                 }
                 if($M3<$row2["M3"]){
                     $M3=$row2["M3"];
+                    $M3 = $M3 * 1000;
                 }
                 if($M4<$row2["M4"]){
                     $M4=$row2["M4"];
+                    $M4 = $M4 * 1000;
                 }
             }
 		}
@@ -103,12 +107,12 @@
                     ?>
                         <tr>
                             <td><?= ++$i; ?></td>
-                            <td><?= $row['nama_bom']; ?></td>
+                            <td><?= $row['nama_bom']."(".$row['satuan'].")"; ?></td>
                             <td><?= get_bulan((int)date("m", strtotime($row['bulan']))); ?></td>
-                            <td><?= $row['M1']; ?></td>
-                            <td><?= $row['M2']; ?></td>
-                            <td><?= $row['M3']; ?></td>
-                            <td><?= $row['M4']; ?></td>
+                            <td><?= $row['M1']*1000; ?></td>
+                            <td><?= $row['M2']*1000; ?></td>
+                            <td><?= $row['M3']*1000; ?></td>
+                            <td><?= $row['M4']*1000; ?></td>
                             <td>
                                 <a href="index.php?p=mps&ket=ubah&id=<?= $row['id_mps'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>
                             </td>

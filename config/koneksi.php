@@ -33,6 +33,12 @@
 		}
 	}
 
+	function print_pre($value){
+		echo "<pre>";
+		print_r($value);
+		echo "</pre>";
+	}
+
 	function get_bahan($id){
 		$sql = "SELECT a.*, b.nama_bahan, b.satuan FROM bom_detail a JOIN bahan b ON a.id_bahan = b.id_bahan WHERE a.id_bom = $id ORDER BY a.level ASC";
 		$q = mysqli_query($GLOBALS['con'], $sql);
@@ -92,6 +98,29 @@
 		unset($bulan[0]);
 		if($bln!=''){
 			return $bulan[$bln];
+		}else{
+			return $bulan;
+		}
+	}
+
+	function get_rev_bulan($bln=''){
+		$bulan = ["", 
+					"January", 
+					"Februari", 
+					"Maret",
+					"April",
+					"Mei",
+					"Juni",
+					"Juli",
+					"Agustus",
+					"September",
+					"Oktober",
+					"November",
+					"Desember",
+				];
+		unset($bulan[0]);
+		if($bln!=''){
+			return array_search($bln, $bulan);
 		}else{
 			return $bulan;
 		}
@@ -163,33 +192,85 @@
 			    }
 			    $bln = "00".$b;
 			    $bln = substr($bln, strlen($bln)-2, 2);
+
+			    $sql_mrp = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b ";
+			    $qmrp = mysqli_query($con, $sql_mrp);
+			    $sr2 = [];
+			    $ohm4 = 0;
+			    if(mysqli_num_rows($qmrp)>0){
+				    while($row_sr2 = mysqli_fetch_array($qmrp)){
+				    	$sr2[$row_sr2['id_bahan']][$row_sr2['minggu']] = $row_sr2['SR'];
+				    	/*if($row_sr2['minggu']==4){
+				    		$ohm4 = $row_sr2['OHI'];
+				    	}*/
+				    }
+			    }
+			    
+
 			    $sql_sr = "SELECT 
 			                    id_bahan,
 			                    jumlah,
 			                    WEEK(tgl_pengadaan) - WEEK('$thn-$bln-01') AS 'minggu' 
 			                FROM pengadaan
-			                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan] AND sts <> 0";
+			                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan]";
 			    $q_sr = mysqli_query($con, $sql_sr);
 			    while($row_sr = mysqli_fetch_array($q_sr)){
-			        if($row_sr['minggu']==0){
-			            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
-			            $SR[$row_sr['minggu']] = 0;
-			        }else{
-			            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
-			            $SR[$row_sr['minggu']] = $row_sr["jumlah"];
-			        }
+			    	if(!isset($sr2[$row['id_bahan']][$row_sr['minggu']])){
+				        if($row_sr['minggu']==0){
+				            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
+				            $SR[$row_sr['minggu']] = 0;
+				        }else{
+				            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
+				            $SR[$row_sr['minggu']] = $row_sr["jumlah"];
+				        }
+			    	}
 			    }
+
+
+			    $sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b AND id_bom <> $id_bom ORDER BY id_mrp DESC LIMIT 1";
+		    	$ohi4 = mysqli_query($con, $sql_ohi4);
+		    	if(mysqli_num_rows($ohi4)>0){
+				    while($row_ohi2 = mysqli_fetch_array($ohi4)){
+				    	print_pre($row_ohi2);
+				    	if($row_ohi2['minggu']==4){
+				    		$ohm4 = $row_ohi2['OHI'];
+				    	}
+				    }
+			    }
+
 			    $bln = $b-1;
-			    $sql_ohi = "SELECT 
-			                  id_bahan,
-			                  jumlah
-			                FROM bahan
-			                WHERE id_bahan = $row[id_bahan]";
-			    $q_ohi = mysqli_query($con, $sql_ohi);
-			    while($row_ohi = mysqli_fetch_array($q_ohi)){
-			        $OHI[0] += $row_ohi["jumlah"];
-			        $OHI[1] += $row_ohi["jumlah"];
+			    if($ohm4 == 0){
+			    	$b2 = $b-1;
+			    	$sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b2 ORDER BY id_mrp DESC LIMIT 1";
+			    	$ohi4 = mysqli_query($con, $sql_ohi4);
+			    	if(mysqli_num_rows($ohi4)>0){
+					    while($row_ohi2 = mysqli_fetch_array($ohi4)){
+					    	//print_pre($row_ohi2);
+					    	if($row_ohi2['minggu']==4){
+					    		$ohm4 = $row_ohi2['OHI'];
+					    	}
+					    }
+					    //echo "DISINI WOTT $row[id_bahan] $ohm4<br>";
+					    $OHI[0] += $ohm4;
+				   	 	$OHI[1] += $ohm4;
+				    }else{
+					    $sql_ohi = "SELECT 
+					                  id_bahan,
+					                  jumlah
+					                FROM bahan
+					                WHERE id_bahan = $row[id_bahan]";
+					    $q_ohi = mysqli_query($con, $sql_ohi);
+					    while($row_ohi = mysqli_fetch_array($q_ohi)){
+					        $OHI[0] += $row_ohi["jumlah"];
+					        $OHI[1] += $row_ohi["jumlah"];
+					    }
+				    }
+			    }else{
+			    	$OHI[0] += $ohm4;
+				    $OHI[1] += $ohm4;
 			    }
+
+
 			    $data[$row['id_bahan']] = array(
 			                                    'id_bahan' => $row['id_bahan'],
 			                                    'nama_bahan' => $row['nama_bahan'],

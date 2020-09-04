@@ -16,7 +16,7 @@
 			$id_bom = $row['id_bom'];
 			$nama_bom = $row['nama_bom'];
 			$satuan = $row['satuan'];
-            $jumlah = $row['jumlah'];
+            $jumlah = $row['jumlah']*1000;
             $tanggal = $row['tanggal'];
 		}
 	}
@@ -61,7 +61,7 @@
             			<tr>
             				<td><?= ++$i; ?></td>
                             <td><?= $row['nama_bom']; ?></td>
-                            <td><?= $row['jumlah']." ".$row['satuan']; ?></td>
+                            <td><?= ($row['jumlah']*1000)." ".$row['satuan']; ?></td>
                             <td><?= $date; ?></td>
             				<td>
                                 <a href="index.php?p=permintaan&ket=ubah&id=<?= $row['id_permintaan'] ?>" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil-alt"></i></a>

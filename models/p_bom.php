@@ -7,6 +7,7 @@ if(isset($_POST['btnSimpan'])){
 	$id_bom = isset($_POST['id_bom'])?$con->real_escape_string($_POST['id_bom']):'';
 	$nama_bom = isset($_POST['nama_bom'])?$con->real_escape_string($_POST['nama_bom']):'';
 	$jumlah = isset($_POST['jumlah'])?$con->real_escape_string($_POST['jumlah']):'';
+	$jumlah = $jumlah/1000;
 	$satuan = isset($_POST['satuan'])?$con->real_escape_string($_POST['satuan']):'';
 	$LT = isset($_POST['LT'])?$con->real_escape_string($_POST['LT']):'';
 

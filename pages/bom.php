@@ -24,7 +24,7 @@
             $rw = mysqli_fetch_array($q);
             $id_bom = $rw['id_bom'];
             $nama_bom = $rw['nama_bom'];
-            $jumlah = $rw['jumlah'];
+            $jumlah = $rw['jumlah']*1000;
             $satuan = $rw['satuan'];
             $LT = $rw['LT'];
         }
@@ -69,7 +69,7 @@
                         <tr>
                             <td><?= ++$i; ?></td>
                             <td><?= $row['nama_bom']; ?></td>
-                            <td><?= $row['jumlah'].' '.$row['satuan']; ?></td>
+                            <td><?= ($row['jumlah']*1000).' '.$row['satuan']; ?></td>
                             <td><?= $row['LT'].' Minggu'; ?></td>
                             <td>
                                 <pre>
@@ -113,10 +113,15 @@
                     <div class="form-group row">
                         <label for="jumlah" class="col-sm-2 col-form-label">Jumlah</label>
                         <div class="col-sm-10">
-                            <input type="number" min="0" step="0.1" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?= isset($jumlah)?$jumlah:''; ?>" required>
+                            <div class="input-group">
+                                <input type="number" min="0" step="0.1" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?= isset($jumlah)?$jumlah*1000:''; ?>" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">Kg</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label for="satuan" class="col-sm-2 col-form-label">Satuan</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="satuan" id="satuan" required>
@@ -133,7 +138,7 @@
                                 ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <label for="LT" class="col-sm-2 col-form-label">Lead Time</label>
                         <div class="col-sm-10">

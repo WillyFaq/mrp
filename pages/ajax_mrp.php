@@ -126,7 +126,7 @@ if(mysqli_num_rows($q)>0){
 
 }else{
     //echo "disini";
-    $data = $mrp->get_mrp($con, $id_bom, $mps, $b, $thn);
+    /*$data = $mrp->get_mrp($con, $id_bom, $mps, $b, $thn);
     
     $data_porel = $mrp->get_porel();
 
@@ -142,8 +142,8 @@ if(mysqli_num_rows($q)>0){
                 $data_porel[$key][$a]['tgl'] = $weeks[$cb];
             }
         }
-    }
-
+    }*/
+/*
     mysqli_autocommit($con,FALSE);
     $process = [];
     // insert mrp
@@ -160,7 +160,6 @@ if(mysqli_num_rows($q)>0){
             $week = date("Y-m-d", strtotime($weeks[$i]));
             $sql = "INSERT INTO mrp (id_bom, id_bahan, bulan, minggu, GR, SR, OHI, NR, POR, POREL) VALUES ";
             $sql .= "($id_bom, $value[id_bahan], '$week', $i, $g, $s, $o, $n, $p, $pr)";
-            //echo "$sql<br>";
             if(mysqli_query($con, $sql)){
                 $process[] = 1; 
             }else{
@@ -207,7 +206,7 @@ if(mysqli_num_rows($q)>0){
         mysqli_commit($con);
     }else{
         mysqli_rollback($con);
-    }
+    }*/
 
 }
 
