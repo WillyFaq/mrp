@@ -231,7 +231,7 @@
 		    	$ohi4 = mysqli_query($con, $sql_ohi4);
 		    	if(mysqli_num_rows($ohi4)>0){
 				    while($row_ohi2 = mysqli_fetch_array($ohi4)){
-				    	print_pre($row_ohi2);
+				    	//print_pre($row_ohi2);
 				    	if($row_ohi2['minggu']==4){
 				    		$ohm4 = $row_ohi2['OHI'];
 				    	}
