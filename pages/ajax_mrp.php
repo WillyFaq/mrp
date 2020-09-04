@@ -37,16 +37,16 @@
             <tr>
                 <td class="text-left"><?= $row['nama_bom']; ?> (<?= $row['satuan']; ?>)</td>
                 <td>
-                    <?= $row['M1']; ?>
+                    <?= $row['M1']*1000; ?>
                 </td>
                 <td>
-                    <?= $row['M2']; ?>
+                    <?= $row['M2']*1000; ?>
                 </td>
                 <td>
-                    <?= $row['M3']; ?>
+                    <?= $row['M3']*1000; ?>
                 </td>
                 <td>
-                    <?= $row['M4']; ?>
+                    <?= $row['M4']*1000; ?>
                 </td>
             </tr>
         <?php endwhile; ?>
@@ -68,9 +68,9 @@ while($row = mysqli_fetch_array($q)){
 $sql = "SELECT * FROM mrp WHERE id_bom = $id_bom AND id_bahan IN (".join($id_bahan, ",").") AND MONTH(bulan) = $b";
 $q = mysqli_query($con, $sql);
 if(mysqli_num_rows($q)>0){
-
     $sql = "SELECT
                 a.id_mrp,
+                a.id_bom,
                 a.id_bahan,
                 c.nama_bahan,
                 c.satuan,
@@ -88,7 +88,7 @@ if(mysqli_num_rows($q)>0){
             FROM mrp a
             JOIN bom_detail b ON a.id_bahan = b.id_bahan
             JOIN bahan c ON b.id_bahan = c.id_bahan
-            WHERE a.id_bom = $id_bom";
+            WHERE a.id_bom = $id_bom AND MONTH(a.bulan) = $b";
         //echo $sql;
     $q = mysqli_query($con, $sql);
     $tmp_data = [];
@@ -113,6 +113,8 @@ if(mysqli_num_rows($q)>0){
                                                         )
                                         );
     }
+
+
     foreach ($tmp_data as $key => $row) {
         $data[$row['id_bahan']]['mrp']['GR'][$row['minggu']] = $row['GR'];
         $data[$row['id_bahan']]['mrp']['SR'][$row['minggu']] = $row['SR'];
@@ -122,7 +124,6 @@ if(mysqli_num_rows($q)>0){
         $data[$row['id_bahan']]['mrp']['PORel'][$row['minggu']] = $row['POREL'];
     }
 
-    
 
 }else{
     //echo "disini";
