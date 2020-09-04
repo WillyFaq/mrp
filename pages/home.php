@@ -98,35 +98,40 @@
 
 <pre>
 <?php
-	$sql = "SELECT 
-				a.id_bom,
-				b.nama_bom,
-				SUM(a.jumlah) AS 'jumlah',
-				a.tanggal
-			FROM permintaan a
-			JOIN bom b ON a.id_bom = b.id_bom
-			GROUP BY MONTH(a.tanggal)";
-	$q = mysqli_query($con, $sql);
+	
+	$labels = get_bulan();
+
 	$data_line = [];
-	$tmp_data = [];
-	$labels = [];
-	$i = 0;
+	$sql = "SELECT * FROM bom";
+	$i=0;
+	$q = mysqli_query($con, $sql);
 	while($row = mysqli_fetch_array($q)){
-		$tmp_data[] = $row;
+		$nilai = [];
+		foreach ($labels as $k => $v) {
+			$j = $k+1;
+			$sqla = "SELECT SUM(jumlah) AS 'jumlah'
+						FROM permintaan
+						WHERE id_bom = $row[id_bom] AND MONTH(tanggal) = $k
+						GROUP BY id_bom";
+			//echo $sqla;
+			$qa = mysqli_query($con, $sqla);
+			if(mysqli_num_rows($qa)>0){
+				while($rowa = mysqli_fetch_array($qa)){
+					$nilai[] = $rowa['jumlah'];
+				}
+			}else{
+				$nilai[] = 0;
+			}
+		}
+		
 		$data_line[$row['id_bom']] = array(
 											"label" => $row['nama_bom'],
 											"backgroundColor" => "COLORS[$i]",
 											"borderColor" => "COLORS[$i]",
-											"data" => [],
+											"data" => $nilai,
 										);
-		$labels[] = date("F", strtotime($row['tanggal']));
 		$i++;
 	}
-
-	foreach ($tmp_data as $key => $value) {
-		$data_line[$value['id_bom']]["data"][] = $value['jumlah'];
-	}
-	//print_r($data_line);
 ?>
 </pre>
 
@@ -136,7 +141,18 @@
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 
-	var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	var MONTHS = [	"January", 
+					"Februari", 
+					"Maret",
+					"April",
+					"Mei",
+					"Juni",
+					"Juli",
+					"Agustus",
+					"September",
+					"Oktober",
+					"November",
+					"Desember",];
 	var COLORS = [
 		'#4dc9f6',
 		'#f67019',
