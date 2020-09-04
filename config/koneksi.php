@@ -2,14 +2,14 @@
 
 	session_start();
 	date_default_timezone_set('Asia/Jakarta');
-	/*
+	
 	$host	= 'localhost';
 	$user	= 'root';
 	$pass	= '';
-	*/
-	$host	= '192.168.1.14';
+	
+	/*$host	= '192.168.1.14';
 	$user	= 'toor';
-	$pass	= 'toor';
+	$pass	= 'toor';*/
 	$db		= 'dbmrp';
 
 	$con=mysqli_connect($host, $user, $pass, $db);
