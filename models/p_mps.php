@@ -77,8 +77,8 @@ if(isset($_POST['btnSimpan'])){
 	    //print_pre($data_porel[$k]);
 	    //$data[$k]['porel'] = $data_porel; 
 	    $p_mrp = insert_mrp($con, $data[$k], $v['id_bom'], (int)$b, $t);
-	    $p_perencanaan = insert_perencanaan($con, $data_porel[$k], (int)$b, $t);
-	    $p_pengeluaran = insert_pengeluaran($con, $data[$k], (int)$b, $t);
+	    $p_perencanaan = insert_perencanaan($con, $data_porel[$k], (int)$b, $t, $v['id_bom']);
+	    $p_pengeluaran = insert_pengeluaran($con, $data[$k], (int)$b, $t, $v['id_bom']);
 	    $proses = array_merge($proses, $p_mrp);
 	    $proses = array_merge($proses, $p_perencanaan);
 	    $proses = array_merge($proses, $p_pengeluaran);
@@ -148,50 +148,63 @@ function insert_mrp($con, $data, $id_bom, $b, $thn){
     return $ret;
 }
 
-function insert_perencanaan($con, $data_porel, $b, $thn){
+function insert_perencanaan($con, $data_porel, $b, $thn, $id_bom){
 	$ret = [];
 	foreach ($data_porel as $k => $row){
         foreach ($row as $c => $d){
         	$id_user = $_SESSION['user'];
             $week = date("Y-m-d", strtotime($d['tgl']));
-            $sql_cek = "SELECT * FROM pengadaan WHERE id_bahan = $k AND tgl_pengadaan = '$week' ";
+            $sql_cek = "SELECT * FROM pengadaan WHERE id_bahan = $k AND tgl_pengadaan = '$week' AND idb = $id_bom ";
             $q = mysqli_query($con, $sql_cek);
             if(mysqli_num_rows($q)>0){
 	            $row = mysqli_fetch_array($q);
 	            $id_pengadaan = $row['id_pengadaan'];
 	            $sql = "UPDATE pengadaan SET jumlah = $d[val] WHERE id_pengadaan = $id_pengadaan";
             }else{
-	            $sql =  "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan, sts) VALUES ";
-	            $sql .= "($id_user, $k, '$week', $d[val], 'MRP', 0)";
+	            $sql =  "INSERT INTO pengadaan (id_user, id_bahan, tgl_pengadaan, jumlah, keterangan, sts, idb) VALUES ";
+	            $sql .= "($id_user, $k, '$week', $d[val], 'MRP', 0, $id_bom)";
             }
+            //echo "$sql<br>";
             $ret[] = mysqli_query($con, $sql)?1:0;
         }
     }
     return $ret;
 }
 
-function insert_pengeluaran($con, $data, $b, $thn){
+function insert_pengeluaran($con, $data, $b, $thn, $id_bom){
 	$ret = [];
 	foreach ($data as $key => $value) {
+		//print_pre($value);
+		/*if($value['id_bahan']==1){
+        	print_pre($value['mrp']["GR"]);*/
+
+		//}
         foreach ($value['mrp']["GR"] as $k => $v) {
             if($k>0){
                 if($v>0){
+                	//echo "$k => $v <br>";
                     $weeks = get_week($b, $thn);
                     $week = date("Y-m-d", strtotime($weeks[$k]));
-                    $sql_cek = "SELECT * FROM pengeluaran WHERE id_bahan = $k AND tgl_pengeluaran = '$week' ";
+                    $sql_cek = "SELECT * FROM pengeluaran WHERE id_bahan = $key AND tgl_pengeluaran = '$week' AND idb = $id_bom ";
+		            
 		            $q = mysqli_query($con, $sql_cek);
 		            if(mysqli_num_rows($q)>0){
 			            $row = mysqli_fetch_array($q);
 			            $id_pengeluaran = $row['id_pengeluaran'];
 			            $sql = "UPDATE pengeluaran SET jumlah = $v WHERE id_pengeluaran = $id_pengeluaran";
 		            }else{
-	                    $sql = "INSERT INTO pengeluaran (id_bahan, tgl_pengeluaran, jumlah, keterangan, sts) VALUES ";
-	                    $sql .= "($key, '$week', $v, 'Produksi', 0)";
+	                    $sql = "INSERT INTO pengeluaran (id_bahan, tgl_pengeluaran, jumlah, keterangan, sts, idb) VALUES ";
+	                    $sql .= "($key, '$week', $v, 'Produksi', 0, $id_bom)";
 	                }
+					/*
+            		echo "$k => $sql_cek<br>";
+            		echo "$k => $sql<br>";
+                    */
                     $ret[] = mysqli_query($con, $sql)?1:0;
                 }
             }
         }
+        //}
     } 
     return $ret;
 }
