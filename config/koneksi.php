@@ -10,7 +10,8 @@
 /*	$host	= '192.168.1.14';
 	$user	= 'toor';
 	$pass	= 'toor';
-	$db		= 'dbmrp';*/
+*/
+	$db		= 'dbmrp';
 
 	$con=mysqli_connect($host, $user, $pass, $db);
 	// Check connection
