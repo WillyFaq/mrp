@@ -352,7 +352,7 @@
   		return mysqli_num_rows($q);
 	}
 	function get_count_permintaan(){
-		$sql = "SELECT SUM(jumlah) AS 'total' FROM permintaan WHERE YEAR(tanggal) = '".date("Y")."' ";
+		$sql = "SELECT COUNT(jumlah) AS 'total' FROM permintaan WHERE YEAR(tanggal) = '".date("Y")."' ";
   		$q = mysqli_query($GLOBALS['con'], $sql);
   		$tot = 0;
   		while($row = mysqli_fetch_array($q)){

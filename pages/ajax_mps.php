@@ -38,13 +38,18 @@
             //echo $sql;
             $q = mysqli_query($con, $sql);
             while($row = mysqli_fetch_array($q)):
+                $M1 = $row['M1'] * 1000;
+                $M2 = $row['M2'] * 1000;
+                $M3 = $row['M3'] * 1000;
+                $M4 = $row['M4'] * 1000;
+
         ?>
             <tr>
                 <td><?= ++$i; ?></td>
                 <td><?= $row['nama_bom']; ?></td>
                 <td>
                     <div class="input-group">
-                        <input type="number" class="form-control" name="M1" id="M1" placeholder="Jumlah" value="<?= isset($row['M1'])?$row['M1']:''; ?>" required >
+                        <input type="number" class="form-control" name="M1" id="M1" placeholder="Jumlah" value="<?= isset($row['M1'])?$M1:''; ?>" required >
                         <div class="input-group-append">
                             <span class="input-group-text" id="st-add" ><?= $row['satuan']; ?></span>
                         </div>
@@ -52,7 +57,7 @@
                 </td>
                 <td>
                     <div class="input-group">
-                        <input type="number" class="form-control" name="M2" id="M2" placeholder="Jumlah" value="<?= isset($row['M2'])?$row['M2']:''; ?>" required >
+                        <input type="number" class="form-control" name="M2" id="M2" placeholder="Jumlah" value="<?= isset($row['M2'])?$M2:''; ?>" required >
                         <div class="input-group-append">
                             <span class="input-group-text" id="st-add" ><?= $row['satuan']; ?></span>
                         </div>
@@ -60,7 +65,7 @@
                 </td>
                 <td>
                     <div class="input-group">
-                        <input type="number" class="form-control" name="M3" id="M3" placeholder="Jumlah" value="<?= isset($row['M3'])?$row['M3']:''; ?>" required >
+                        <input type="number" class="form-control" name="M3" id="M3" placeholder="Jumlah" value="<?= isset($row['M3'])?$M3:''; ?>" required >
                         <div class="input-group-append">
                             <span class="input-group-text" id="st-add" ><?= $row['satuan']; ?></span>
                         </div>
@@ -68,7 +73,7 @@
                 </td>
                 <td>
                     <div class="input-group">
-                        <input type="number" class="form-control" name="M4" id="M4" placeholder="Jumlah" value="<?= isset($row['M4'])?$row['M4']:''; ?>" required >
+                        <input type="number" class="form-control" name="M4" id="M4" placeholder="Jumlah" value="<?= isset($row['M4'])?$M4:''; ?>" required >
                         <div class="input-group-append">
                             <span class="input-group-text" id="st-add" ><?= $row['satuan']; ?></span>
                         </div>
