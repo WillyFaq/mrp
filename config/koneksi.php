@@ -7,10 +7,10 @@
 	$user	= 'root';
 	$pass	= '';
 	
-	/*$host	= '192.168.1.14';
+/*	$host	= '192.168.1.14';
 	$user	= 'toor';
-	$pass	= 'toor';*/
-	$db		= 'dbmrp';
+	$pass	= 'toor';
+	$db		= 'dbmrp';*/
 
 	$con=mysqli_connect($host, $user, $pass, $db);
 	// Check connection
@@ -154,7 +154,7 @@
 
 		private $data_porel;
 
-		function get_mrp($con, $id_bom, $mps, $b, $thn){
+		function get_mrp($con, $no_urut, $id_bom, $mps, $b, $thn){
 			$sql = "SELECT 
 			            a.*,
 			            b.*,
@@ -198,64 +198,63 @@
 			    $bln = "00".$b;
 			    $bln = substr($bln, strlen($bln)-2, 2);
 
-			    $sql_mrp = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b ";
-			    $qmrp = mysqli_query($con, $sql_mrp);
-			    $sr2 = [];
-			    $ohm4 = 0;
-			    if(mysqli_num_rows($qmrp)>0){
-				    while($row_sr2 = mysqli_fetch_array($qmrp)){
-				    	$sr2[$row_sr2['id_bahan']][$row_sr2['minggu']] = $row_sr2['SR'];
-				    	/*if($row_sr2['minggu']==4){
-				    		$ohm4 = $row_sr2['OHI'];
-				    	}*/
-				    }
-			    }
-			    
-
-			    $sql_sr = "SELECT 
-			                    id_bahan,
-			                    jumlah,
-			                    WEEK(tgl_pengadaan) - WEEK('$thn-$bln-01') AS 'minggu' 
-			                FROM pengadaan
-			                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan]";
-			    $q_sr = mysqli_query($con, $sql_sr);
-			    while($row_sr = mysqli_fetch_array($q_sr)){
-			    	if(!isset($sr2[$row['id_bahan']][$row_sr['minggu']])){
-				        if($row_sr['minggu']==0){
+			    if($no_urut==0){
+				    $sql_sr = "SELECT 
+				                    id_bahan,
+				                    jumlah,
+				                    WEEK(tgl_pengadaan) - WEEK('$thn-$bln-01') AS 'minggu' 
+				                FROM pengadaan
+				                WHERE MONTH(tgl_pengadaan) = $b AND id_bahan = $row[id_bahan]";
+				    $q_sr = mysqli_query($con, $sql_sr);
+				    while($row_sr = mysqli_fetch_array($q_sr)){
+				    	if($row_sr['minggu']==0){
 				            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
 				            $SR[$row_sr['minggu']] = 0;
 				        }else{
 				            $OHI[$row_sr['minggu']] += $row_sr["jumlah"];
 				            $SR[$row_sr['minggu']] = $row_sr["jumlah"];
 				        }
-			    	}
+				    	/*if(!isset($sr2[$row['id_bahan']][$row_sr['minggu']])){
+					        
+				    	}*/
+				    }
 			    }
 
+			    /*$sql_mrp = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b AND id_bom <> $id_bom ";
+			    $qmrp = mysqli_query($con, $sql_mrp);
+			    $sr2 = [];
+			    $ohm4 = 0;
+			    if(mysqli_num_rows($qmrp)>0){
+				    while($row_sr2 = mysqli_fetch_array($qmrp)){
+				    	$sr2[$row_sr2['id_bahan']][$row_sr2['minggu']] = $row_sr2['SR'];
+				    }
+			    }*/
 
-			    $sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b AND id_bom <> $id_bom ORDER BY id_mrp DESC LIMIT 1";
+			    $ohm4 = -1;
+
+			    $bln = $b-1;
+			    /// cek onhand bulan sebelummnya
+			    $sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $bln ORDER BY id_mrp DESC LIMIT 1";
 		    	$ohi4 = mysqli_query($con, $sql_ohi4);
 		    	if(mysqli_num_rows($ohi4)>0){
 				    while($row_ohi2 = mysqli_fetch_array($ohi4)){
-				    	//print_pre($row_ohi2);
 				    	if($row_ohi2['minggu']==4){
 				    		$ohm4 = $row_ohi2['OHI'];
 				    	}
 				    }
 			    }
 
-			    $bln = $b-1;
-			    if($ohm4 == 0){
-			    	$b2 = $b-1;
-			    	$sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b2 ORDER BY id_mrp DESC LIMIT 1";
+			    if($ohm4 < 0){
+
+			    	/// cek onhand bom lain
+			    	$sql_ohi4 = "SELECT * FROM mrp WHERE id_bahan = $row[id_bahan] AND MONTH(bulan) = $b AND id_bom <> $id_bom ORDER BY id_mrp DESC LIMIT 1";
 			    	$ohi4 = mysqli_query($con, $sql_ohi4);
 			    	if(mysqli_num_rows($ohi4)>0){
 					    while($row_ohi2 = mysqli_fetch_array($ohi4)){
-					    	//print_pre($row_ohi2);
 					    	if($row_ohi2['minggu']==4){
 					    		$ohm4 = $row_ohi2['OHI'];
 					    	}
 					    }
-					    //echo "DISINI WOTT $row[id_bahan] $ohm4<br>";
 					    $OHI[0] += $ohm4;
 				   	 	$OHI[1] += $ohm4;
 				    }else{

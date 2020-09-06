@@ -38,7 +38,7 @@ if(isset($_POST['btnSimpan'])){
 		$proses[] = mysqli_query($con, $sql)?1:0;
 	}
 
-	$sql = "SELECT * FROM mps ORDER BY bulan";
+	$sql = "SELECT * FROM mps ORDER BY bulan, id_bom";
 	$q = mysqli_query($con, $sql);
 	$mps = [];
 	while($row = mysqli_fetch_array($q)){
@@ -55,10 +55,11 @@ if(isset($_POST['btnSimpan'])){
 
 	$mrp = new MRP();
 	$data = [];
+	$no = 0;
 	foreach ($mps as $k => $v) {
 		$b = date("m", strtotime($v['bulan']));
 		$t = date("Y", strtotime($v['bulan']));
-		$data[$k] =  $mrp->get_mrp($con, $v['id_bom'], $v['M'], (int)$b, $t);
+		$data[$k] =  $mrp->get_mrp($con, $no, $v['id_bom'], $v['M'], (int)$b, $t);
 		$data_porel[$k] = $mrp->get_porel();
 		//print_pre($data_porel[$k]);
 	    foreach ($data_porel[$k] as $key => $value) {
@@ -82,13 +83,13 @@ if(isset($_POST['btnSimpan'])){
 	    $proses = array_merge($proses, $p_mrp);
 	    $proses = array_merge($proses, $p_perencanaan);
 	    $proses = array_merge($proses, $p_pengeluaran);
-
+	    $no++;
 	}
 
 	
 
-	/*
 	print_pre($data);
+	/*
 	print_pre($proses);*/
 	if(!in_array(0, $proses)){
         mysqli_commit($con);
@@ -102,19 +103,8 @@ if(isset($_POST['btnSimpan'])){
 		$_SESSION["flash"]["msg"] = "Data gagal disimpan!";
 		echo mysqli_error($con);
     }
-
-	/*if($proses){
-		$_SESSION["flash"]["type"] = "success";
-		$_SESSION["flash"]["head"] = "Sukses";
-		$_SESSION["flash"]["msg"] = "Data berhasil disimpan!";
-	}else{
-		$_SESSION["flash"]["type"] = "danger";
-		$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
-		$_SESSION["flash"]["msg"] = "Data gagal disimpan!";
-		echo mysqli_error($con);
-	}
-*/
-	header("location:../index.php?p=mps");
+    
+	//header("location:../index.php?p=mps");
 }
 
 
